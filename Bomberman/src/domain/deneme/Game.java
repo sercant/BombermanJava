@@ -1,9 +1,9 @@
 package domain.deneme;
 
-import org.newdawn.slick.*;
+import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.state.*;
+import org.newdawn.slick.state.StateBasedGame;
 
 public class Game extends StateBasedGame{
 	
@@ -29,7 +29,7 @@ public class Game extends StateBasedGame{
 		AppGameContainer appgc;
 		try {
 			appgc = new AppGameContainer(new Game(gameName));
-			appgc.setDisplayMode(640, 360, false);
+			appgc.setDisplayMode(800, 600, false);
 			appgc.start();
 		} catch (SlickException e) {
 			e.printStackTrace();
