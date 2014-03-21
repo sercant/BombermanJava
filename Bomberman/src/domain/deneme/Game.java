@@ -10,6 +10,8 @@ public class Game extends StateBasedGame{
 	public static final String gameName = "Bomberman";
 	public static final int menu = 0;
 	public static final int play = 1;
+	public static final int enterCode = 2;
+	public static final int highScores = 3;
 	
 	public Game(String name) {
 		super(name);
@@ -30,6 +32,7 @@ public class Game extends StateBasedGame{
 		try {
 			appgc = new AppGameContainer(new Game(gameName));
 			appgc.setDisplayMode(800, 600, false);
+			appgc.setTargetFrameRate(60);
 			appgc.start();
 		} catch (SlickException e) {
 			e.printStackTrace();

@@ -1,6 +1,5 @@
 package domain.deneme;
 
-import org.lwjgl.input.Mouse;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -29,7 +28,7 @@ public class Menu extends BasicGameState {
 		
 		menuButtons = new String[4];
 		menuButtons[0] = ">Start Game<";
-		menuButtons[1] = "Continue";
+		menuButtons[1] = "Enter Code";
 		menuButtons[2] = "High Scores";
 		menuButtons[3] = "Quit Game";
 		
@@ -51,8 +50,6 @@ public class Menu extends BasicGameState {
 			throws SlickException {
 		Input input = gc.getInput();
 		input.disableKeyRepeat();
-		int x = Mouse.getX();
-		int y = Mouse.getY();
 		
 		if (input.isKeyPressed(Input.KEY_DOWN)) {
 			menuButtons[selectedButton] = menuButtons[selectedButton].replace(">", "");
@@ -71,6 +68,7 @@ public class Menu extends BasicGameState {
 			menuButtons[selectedButton] = ">" + menuButtons[selectedButton] + "<";
 		}
 		if (input.isKeyPressed(Input.KEY_ENTER)) {
+			if(selectedButton == menuButtons.length) System.exit(0);
 			sbg.enterState(selectedButton + 1);
 		}
 	}
