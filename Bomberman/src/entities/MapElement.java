@@ -1,34 +1,29 @@
 package entities;
 
-import org.newdawn.slick.geom.Vector2f;
 
 public class MapElement {
 	
-	private Vector2f location;
-
-	public MapElement(Vector2f loc) {
-		this.location = loc;
-    }
+	private int x;
+	private int y;
 	
-    public MapElement(float x, float y) {
-        location = new Vector2f();
-        location.x = x;
-        location.y = y;
+    public MapElement(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 
     public float getX() {
-        return location.x;
+        return this.x;
     }
 
     public void setX(int x) {
-        this.location.x = x;
+        this.x = x;
     }
 
     public float getY() {
-        return location.y;
+        return this.y;
     }
 
     public void setY(int y) {
-        this.location.y = y;
+        this.y = y;
     }
 }

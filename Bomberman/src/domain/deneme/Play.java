@@ -16,8 +16,6 @@ public class Play extends BasicGameState {
 	private Animation player, movingUp, movingDown, movingLeft, movingRight;
 	private SpriteSheet sheet;
 	private Image worldMap;
-	private boolean quit = false;
-	private int[] duration = {200, 200};
 	private Vector2f playerPos;
 	
 	
@@ -68,27 +66,31 @@ public class Play extends BasicGameState {
 			throws SlickException {
 		Input input = gc.getInput();
 		//input.disableKeyRepeat();
-		player.setAutoUpdate(false);
-
-		if(input.isKeyDown(Input.KEY_DOWN)){
-			player = movingDown;
-			player.setAutoUpdate(true);
-			playerPos.y += delta * .1f; 
-		}
-		if(input.isKeyDown(Input.KEY_UP)){
-			player = movingUp;
-			player.setAutoUpdate(true);
-			playerPos.y -= delta * .1f; 
-		}
-		if(input.isKeyDown(Input.KEY_LEFT)){
-			player = movingLeft;
-			player.setAutoUpdate(true);
-			playerPos.x -= delta * .1f; 
-		}
-		if(input.isKeyDown(Input.KEY_RIGHT)){
-			player = movingRight;
-			player.setAutoUpdate(true);
-			playerPos.x += delta * .1f; 
+		
+		if(!input.isKeyDown(Input.KEY_DOWN) && !input.isKeyDown(Input.KEY_UP) && !input.isKeyDown(Input.KEY_LEFT) && !input.isKeyDown(Input.KEY_RIGHT)){
+			player.setAutoUpdate(false);
+			player.setCurrentFrame(1);
+		}else{
+			if(input.isKeyDown(Input.KEY_DOWN)){
+				player = movingDown;
+				player.setAutoUpdate(true);
+				playerPos.y += delta * .1f; 
+			}
+			if(input.isKeyDown(Input.KEY_UP)){
+				player = movingUp;
+				player.setAutoUpdate(true);
+				playerPos.y -= delta * .1f; 
+			}
+			if(input.isKeyDown(Input.KEY_LEFT)){
+				player = movingLeft;
+				player.setAutoUpdate(true);
+				playerPos.x -= delta * .1f; 
+			}
+			if(input.isKeyDown(Input.KEY_RIGHT)){
+				player = movingRight;
+				player.setAutoUpdate(true);
+				playerPos.x += delta * .1f; 
+			}
 		}
 	}
 
