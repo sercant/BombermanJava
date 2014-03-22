@@ -24,6 +24,8 @@ public class Player {
 	
 	private boolean isAlive;
 	
+	private int score;
+	
 	
 
 	public Player(Vector2f loc, Direction dir){
@@ -45,6 +47,8 @@ public class Player {
 		this.moveSpeed = moveSpeed;
 		
 		isAlive = true;
+		
+		score = 0;
 	}
 	
 	public void kill(){
@@ -53,7 +57,9 @@ public class Player {
 		if(lives < 0)
 			isAlive = false;
 	}
-	
+	public void addScore(int score){
+		this.score += score;
+	}
 	public void powerUp(PowerUp power){
 		switch (power) {
 		case Speed:
@@ -122,5 +128,13 @@ public class Player {
 	
 	public boolean isAlive() {
 		return isAlive;
+	}
+
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
 	}
 }
