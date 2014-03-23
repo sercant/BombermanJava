@@ -32,4 +32,9 @@ public class Bomb extends IndestructibleElement{
 		
 		return exploded;
 	}
+	
+	public void setExploded(boolean exploded) { // use this in case an explosion intersected with this bomb
+		this.exploded = exploded;
+	}
+	
 }
