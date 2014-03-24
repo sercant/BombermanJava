@@ -1,4 +1,7 @@
-package domain.deneme;
+package game.gui.test;
+
+import game.gui.states.Menu;
+import game.gui.states.Play;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;

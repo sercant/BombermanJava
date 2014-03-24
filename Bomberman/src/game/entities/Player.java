@@ -1,10 +1,10 @@
-package entities;
+package game.entities;
 
 import org.newdawn.slick.geom.Vector2f;
 
 public class Player {
 	//for prev loc
-	private Vector2f prevLoc;
+	private Vector2f prevLoc;// these values might be changed to plain int
 	//current loc
 	private Vector2f currentLoc;
 	//Player direction

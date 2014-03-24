@@ -1,4 +1,4 @@
-package domain.deneme;
+package game.gui.states;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;

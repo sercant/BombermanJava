@@ -1,4 +1,4 @@
-package entities;
+package game.entities;
 
 
 public class PowerUpElement extends MapElement{

@@ -1,4 +1,4 @@
-package entities;
+package game.entities;
 
 
 public class DestructibleElement extends MapElement{

@@ -1,4 +1,4 @@
-package domain.deneme;
+package game.gui.states;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -6,24 +6,24 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-public class EnterCode extends BasicGameState{
+public class Highscores extends BasicGameState{
 
 	@Override
-	public void init(GameContainer container, StateBasedGame game)
+	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void render(GameContainer container, StateBasedGame game, Graphics g)
+	public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
 			throws SlickException {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void update(GameContainer container, StateBasedGame game, int delta)
+	public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
 			throws SlickException {
 		// TODO Auto-generated method stub
 		
