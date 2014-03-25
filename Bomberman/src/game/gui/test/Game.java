@@ -1,15 +1,20 @@
-package domain.deneme;
+package game.gui.test;
 
-import org.newdawn.slick.*;
+import game.gui.states.Menu;
+import game.gui.states.Play;
+
+import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.state.*;
+import org.newdawn.slick.state.StateBasedGame;
 
 public class Game extends StateBasedGame{
 	
 	public static final String gameName = "Bomberman";
 	public static final int menu = 0;
 	public static final int play = 1;
+	public static final int enterCode = 2;
+	public static final int highScores = 3;
 	
 	public Game(String name) {
 		super(name);
@@ -29,7 +34,8 @@ public class Game extends StateBasedGame{
 		AppGameContainer appgc;
 		try {
 			appgc = new AppGameContainer(new Game(gameName));
-			appgc.setDisplayMode(640, 360, false);
+			appgc.setDisplayMode(800, 600, false);
+			appgc.setTargetFrameRate(60);
 			appgc.start();
 		} catch (SlickException e) {
 			e.printStackTrace();
