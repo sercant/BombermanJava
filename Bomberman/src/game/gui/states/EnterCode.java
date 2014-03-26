@@ -7,6 +7,10 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 public class EnterCode extends BasicGameState{
+	
+	public EnterCode(int state){
+		
+	}
 
 	@Override
 	public void init(GameContainer container, StateBasedGame game)
@@ -32,7 +36,7 @@ public class EnterCode extends BasicGameState{
 	@Override
 	public int getID() {
 		// TODO Auto-generated method stub
-		return 0;
+		return 2;
 	}
 
 }

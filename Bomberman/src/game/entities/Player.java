@@ -3,10 +3,12 @@ package game.entities;
 import org.newdawn.slick.geom.Vector2f;
 
 public class Player {
-	//for prev loc
-	private Vector2f prevLoc;// these values might be changed to plain int
-	//current loc
-	private Vector2f currentLoc;
+//	//for prev loc
+//	private Vector2f prevLoc;// these values might be changed to plain int
+//	//current loc
+//	private Vector2f currentLoc;
+	private int x, y;
+	private int prevX, prevY;
 	//Player direction
 	private Direction direction;
 	//prev direction
@@ -28,14 +30,17 @@ public class Player {
 	
 	
 
-	public Player(Vector2f loc, Direction dir){
-		this(loc, dir, 3, 1, 1, .1f);
+	public Player(/*Vector2f loc,*/int x, int y, Direction dir){
+		this(/*loc,*/ x, y, dir, 3, 1, 1, .1f);
 	}
 	
-	public Player(Vector2f loc, Direction dir, int lifeCount, int bombCount, int explosionRange, float moveSpeed) {
+	public Player(/*Vector2f loc,*/int x, int y, Direction dir, int lifeCount, int bombCount, int explosionRange, float moveSpeed) {
 		//This way is not appropriate make setters for this variables and checks
-		currentLoc = loc;
-		prevLoc = currentLoc;
+//		currentLoc = loc;
+//		prevLoc = currentLoc;
+		setX(x);
+		setY(y);
+		
 		direction = dir;
 		
 		lives = lifeCount;
@@ -76,10 +81,10 @@ public class Player {
 		}
 	}
 	
-	public void setCurrentLoc(Vector2f currentLoc) {
-		prevLoc = currentLoc;
-		this.currentLoc = currentLoc;
-	}
+//	public void setCurrentLoc(Vector2f currentLoc) {
+//		prevLoc = currentLoc;
+//		this.currentLoc = currentLoc;
+//	}
 
 	public void setDirection(Direction direction) {
 		prevDirection = direction;
@@ -94,16 +99,42 @@ public class Player {
 		return prevDirection;
 	}
 
-	public Vector2f getPrevLoc() {
-		return prevLoc;
-	}
-
-	public Vector2f getCurrentLoc() {
-		return currentLoc;
-	}
-
+//	public Vector2f getPrevLoc() {
+//		return prevLoc;
+//	}
+//
+//	public Vector2f getCurrentLoc() {
+//		return currentLoc;
+//	}
+	
 	public Direction getDirection() {
 		return direction;
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public void setX(int x) {
+		this.prevX = this.x;
+		this.x = x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public void setY(int y) {
+		this.prevY = this.y;
+		this.y = y;
+	}
+
+	public int getPrevX() {
+		return prevX;
+	}
+
+	public int getPrevY() {
+		return prevY;
 	}
 
 	public int getLives() {
