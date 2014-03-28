@@ -1,18 +1,9 @@
 package game.entities;
 
-import org.newdawn.slick.geom.Vector2f;
 
-public class Player {
-//	//for prev loc
-//	private Vector2f prevLoc;// these values might be changed to plain int
-//	//current loc
-//	private Vector2f currentLoc;
-	private int x, y;
-	private int prevX, prevY;
-	//Player direction
-	private Direction direction;
-	//prev direction
-	private Direction prevDirection;
+public class Player extends DynamicElement{
+
+	public static final int ID = 2;
 	//life count
 	private int lives;
 	//bombCount
@@ -24,24 +15,19 @@ public class Player {
 	//move speed
 	private float moveSpeed;
 	
-	private boolean isAlive;
+	private boolean alive;
+	
+	private boolean moving;
 	
 	private int score;
 	
-	
-
-	public Player(/*Vector2f loc,*/int x, int y, Direction dir){
-		this(/*loc,*/ x, y, dir, 3, 1, 1, .1f);
+	public Player(int x, int y, Direction dir){
+		this( x, y, dir, 3, 1, 1, .5f);
 	}
 	
-	public Player(/*Vector2f loc,*/int x, int y, Direction dir, int lifeCount, int bombCount, int explosionRange, float moveSpeed) {
-		//This way is not appropriate make setters for this variables and checks
-//		currentLoc = loc;
-//		prevLoc = currentLoc;
-		setX(x);
-		setY(y);
-		
-		direction = dir;
+	public Player(int x, int y, Direction dir, int lifeCount, int bombCount, int explosionRange, float moveSpeed) {
+
+		super(x, y, dir);
 		
 		lives = lifeCount;
 		
@@ -51,20 +37,24 @@ public class Player {
 		
 		this.moveSpeed = moveSpeed;
 		
-		isAlive = true;
+		alive = true;
+		
+		moving = false;
 		
 		score = 0;
 	}
 	
 	public void kill(){
-		if(isAlive)
+		if(alive)
 			lives--;
 		if(lives < 0)
-			isAlive = false;
+			alive = false;
 	}
+	
 	public void addScore(int score){
 		this.score += score;
 	}
+	
 	public void powerUp(PowerUp power){
 		switch (power) {
 		case Speed:
@@ -80,61 +70,9 @@ public class Player {
 			break;
 		}
 	}
-	
-//	public void setCurrentLoc(Vector2f currentLoc) {
-//		prevLoc = currentLoc;
-//		this.currentLoc = currentLoc;
-//	}
-
-	public void setDirection(Direction direction) {
-		prevDirection = direction;
-		this.direction = direction;
-	}
 
 	public void setActiveBombCount(int activeBombCount) {
 		this.activeBombCount = activeBombCount;
-	}
-
-	public Direction getPrevDirection() {
-		return prevDirection;
-	}
-
-//	public Vector2f getPrevLoc() {
-//		return prevLoc;
-//	}
-//
-//	public Vector2f getCurrentLoc() {
-//		return currentLoc;
-//	}
-	
-	public Direction getDirection() {
-		return direction;
-	}
-
-	public int getX() {
-		return x;
-	}
-
-	public void setX(int x) {
-		this.prevX = this.x;
-		this.x = x;
-	}
-
-	public int getY() {
-		return y;
-	}
-
-	public void setY(int y) {
-		this.prevY = this.y;
-		this.y = y;
-	}
-
-	public int getPrevX() {
-		return prevX;
-	}
-
-	public int getPrevY() {
-		return prevY;
 	}
 
 	public int getLives() {
@@ -158,7 +96,7 @@ public class Player {
 	}
 	
 	public boolean isAlive() {
-		return isAlive;
+		return alive;
 	}
 
 	public int getScore() {
@@ -168,4 +106,37 @@ public class Player {
 	public void setScore(int score) {
 		this.score = score;
 	}
+
+	public boolean isMoving() {
+		return moving;
+	}
+
+	public void setMoving(boolean moving) {
+		this.moving = moving;
+	}
+
+	public static int getId() {
+		return ID;
+	}
+
+	public void setLives(int lives) {
+		this.lives = lives;
+	}
+
+	public void setBombCount(int bombCount) {
+		this.bombCount = bombCount;
+	}
+
+	public void setExplosionRange(int explosionRange) {
+		this.explosionRange = explosionRange;
+	}
+
+	public void setMoveSpeed(float moveSpeed) {
+		this.moveSpeed = moveSpeed;
+	}
+
+	public void setAlive(boolean alive) {
+		this.alive = alive;
+	}
+	
 }

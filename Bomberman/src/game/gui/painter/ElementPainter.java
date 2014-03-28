@@ -1,5 +1,6 @@
 package game.gui.painter;
 
+import game.entities.Door;
 import game.entities.Map;
 import game.entities.Player;
 import game.entities.SolidWall;
@@ -68,6 +69,13 @@ public class ElementPainter {
 			g.setColor(Color.white);
 		}
 		
+		Door door = map.getDoor();
+		
+		if(door != null){
+			g.setColor(Color.black);
+			doorIMG.draw(door.getX() * Game.TILESIZE, door.getY() * Game.TILESIZE);
+			g.setColor(Color.white);
+		}
 	}
 
 	public Image getSolidWallIMG() {
