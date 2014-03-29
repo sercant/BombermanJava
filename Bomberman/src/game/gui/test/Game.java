@@ -13,7 +13,8 @@ import org.newdawn.slick.state.StateBasedGame;
 
 public class Game extends StateBasedGame{
 	
-	public static final int TILESIZE = 16;
+	public static final int SCALE = 4;
+	public static final int TILESIZE = 16 * SCALE;
 	public static final String gameName = "Bomberman";
 	public static final int menu = 0;
 	public static final int play = 1;

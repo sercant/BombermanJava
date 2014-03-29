@@ -2,8 +2,10 @@ package game.gui.painter;
 
 import game.entities.Door;
 import game.entities.Map;
+import game.entities.MapElement;
 import game.entities.Player;
 import game.entities.SolidWall;
+import game.gui.camera.Camera;
 import game.gui.test.Game;
 
 import java.util.LinkedList;
@@ -23,24 +25,33 @@ public class ElementPainter {
 	private Image playerIMG;
 	private Image powerUpIMG;
 	
+	private Camera cam;
 	private Map map;
 	private int delta;
 	private Graphics g;
 	
-	public ElementPainter(Map map, Image solidWallIMG, Image brickWallIMG, Image bombIMG, Image doorIMG, Image explosionIMG, Image playerIMG, Image powerUpIMG){
-		this.solidWallIMG = solidWallIMG;
-		this.brickWallIMG = brickWallIMG;
-		this.bombIMG = bombIMG;
-		this.doorIMG = doorIMG;
-		this.explosionIMG = explosionIMG;
-		this.playerIMG = playerIMG;
-		this.powerUpIMG = powerUpIMG;
-		
+	public ElementPainter(Map map, Camera cam, Image solidWallIMG, Image brickWallIMG, Image bombIMG, Image doorIMG, Image explosionIMG, Image playerIMG, Image powerUpIMG){
+		this.solidWallIMG = filterAndScale(solidWallIMG);
+		this.brickWallIMG = filterAndScale(brickWallIMG);
+		this.bombIMG = filterAndScale(bombIMG);
+		this.doorIMG = filterAndScale(doorIMG);
+		this.explosionIMG = filterAndScale(explosionIMG);
+		this.playerIMG = filterAndScale(playerIMG);
+		this.powerUpIMG = filterAndScale(powerUpIMG);
+		this.cam = cam;
 		this.map = map;
 		
 		//sprite init
 	}
-
+	
+	private Image filterAndScale(Image image){
+		if(image != null){
+			image.setFilter(Image.FILTER_NEAREST);
+			return image.getScaledCopy(Game.SCALE);
+		}else
+			return null;
+	}
+	
 	public void draw(int delta, Graphics g) {
 		this.delta = delta;
 		this.g = g;
@@ -55,29 +66,31 @@ public class ElementPainter {
 			SolidWall solidWall = (SolidWall) iterator.next();
 			
 			if(solidWall != null){
-				g.setColor(Color.black);
-				solidWallIMG.draw(solidWall.getX() * Game.TILESIZE, solidWall.getY() * Game.TILESIZE);
-				g.setColor(Color.white);
+				drawElement(solidWallIMG, solidWall);
 			}
-		}
-		
-		Player player = map.getPlayer();
-		
-		if(player != null){
-			g.setColor(Color.black);
-			playerIMG.draw(player.getX() * Game.TILESIZE, player.getY() * Game.TILESIZE);
-			g.setColor(Color.white);
 		}
 		
 		Door door = map.getDoor();
 		
 		if(door != null){
-			g.setColor(Color.black);
-			doorIMG.draw(door.getX() * Game.TILESIZE, door.getY() * Game.TILESIZE);
-			g.setColor(Color.white);
+			drawElement(doorIMG, door);
 		}
+		
+		Player player = map.getPlayer();
+		
+		if(player != null){
+			drawElement(playerIMG, player);
+		}
+		
+		
 	}
-
+	
+	private void drawElement(Image i, MapElement e){
+		g.setColor(Color.black);
+		i.draw(e.getX() * Game.TILESIZE - cam.getCameraX(), e.getY() * Game.TILESIZE - cam.getCameraY());
+		g.setColor(Color.white);
+	}
+	
 	public Image getSolidWallIMG() {
 		return solidWallIMG;
 	}

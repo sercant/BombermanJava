@@ -6,17 +6,23 @@ import game.entities.Map;
 import game.entities.Player;
 import game.entities.PowerUp;
 import game.entities.SolidWall;
+import game.gui.test.Game;
 import game.interfaces.IPlayer;
+
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.StateBasedGame;
 
 public class IPlayerIMP extends Player implements IPlayer {
 
 	private Map map;
 	private float moveTimer;
+	private StateBasedGame game;
 	
-	public IPlayerIMP(int x, int y, Direction dir) {
+	public IPlayerIMP(int x, int y, Direction dir, StateBasedGame game) {
 		super(x, y, dir);
 		// TODO Auto-generated constructor stub
 		resetMoveTimer();
+		this.game = game;
 	}
 
 	public IPlayerIMP(int x, int y, Direction dir, int lifeCount,
@@ -39,7 +45,13 @@ public class IPlayerIMP extends Player implements IPlayer {
 			}
 		}
 		if(colMap[getY()][getX()] == Door.ID && map.getDoor().isOpen()){
-			System.out.println("Stage Completed!!");
+			try {
+				game.getCurrentState().init(game.getContainer(), game);
+				game.enterState(Game.menu);
+			} catch (SlickException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 

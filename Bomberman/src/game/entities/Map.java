@@ -1,5 +1,7 @@
 package game.entities;
 
+import game.gui.test.Game;
+
 import java.util.LinkedList;
 
 // We are going to be using LinkedList implementation of list because as it is stated the web-site bellow
@@ -16,6 +18,8 @@ public class Map {
 	private Door door;
 	private Player player;									//single player for now
 	private int[][] colMap;
+	private int tileCountX;
+	private int tileCountY;
 	
 	public Map(int tileCountX, int tileCountY) {
 		solidWalls = new LinkedList<SolidWall>();
@@ -27,6 +31,8 @@ public class Map {
 		explosions = new LinkedList<Explosion>();
 		
 		powerUpElements = new LinkedList<PowerUpElement>();
+		this.tileCountX = tileCountX;
+		this.tileCountY = tileCountY;
 		
 		colMap = new int[tileCountY][tileCountX];
 		
@@ -89,5 +95,13 @@ public class Map {
 		// TODO Auto-generated method stub
 		this.door = door;
 		colMap[door.getY()][door.getX()] = Door.ID;
+	}
+	
+	public int getWidth(){
+		return tileCountX * Game.TILESIZE;
+	}
+	
+	public int getHeight(){
+		return tileCountY * Game.TILESIZE;
 	}
 }

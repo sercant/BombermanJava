@@ -5,8 +5,11 @@ import game.entities.Door;
 import game.entities.Map;
 import game.entities.SolidWall;
 import game.entityImps.IPlayerIMP;
+import game.gui.camera.Camera;
 import game.gui.painter.ElementPainter;
+import game.gui.test.Game;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -20,6 +23,7 @@ public class Play extends BasicGameState {
 	private Map map;
 	private ElementPainter painter;
 	private int delta;
+	private Camera cam;
 	
 	public Play(int state){
 		
@@ -29,11 +33,12 @@ public class Play extends BasicGameState {
 	public void init(GameContainer gc, StateBasedGame sbg)
 			throws SlickException {
 		map = new Map(32, 21);
-		initMap();
-		painter = new ElementPainter(map, new Image("res/solidWall.png"), null, null, new Image("res/solidWall.png"), null, new Image("res/solidWall.png"), null);
+		initMap(sbg);
+		cam = new Camera(gc, map);
+		painter = new ElementPainter(map, cam, new Image("res/solidWall.png"), new Image("res/brickWall.png"), null, new Image("res/solidWall.png"), null, new Image("res/player.png"), null);
 	}
 
-	private void initMap() {
+	private void initMap(StateBasedGame sbg) {
 		// TODO Auto-generated method stub
 		int tileCountY = 21;
 		int tileCountX = 31;
@@ -48,14 +53,16 @@ public class Play extends BasicGameState {
 			}
 		}
 		
-		map.setPlayer(new IPlayerIMP(1, 1, Direction.Down));
+		map.setPlayer(new IPlayerIMP(1, 1, Direction.Down, sbg));
 		map.setDoor(new Door(7, 1));
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
 			throws SlickException {
+		g.setBackground(new Color(59, 121, 1));
 		painter.draw(delta, g);
+		g.drawString("X: " + cam.getCameraX() + " Y: " + cam.getCameraY(), 300, 10);
 	}
 
 	@Override
@@ -78,6 +85,7 @@ public class Play extends BasicGameState {
 			map.getDoor().open();
 		}
 		player.update(map, delta);
+		cam.centerOn(map.getPlayer().getX() * Game.TILESIZE, map.getPlayer().getY() * Game.TILESIZE);
 	}
 
 	@Override
