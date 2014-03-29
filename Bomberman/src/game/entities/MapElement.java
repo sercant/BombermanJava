@@ -11,7 +11,7 @@ public class MapElement {
         this.y = y;
     }
 
-    public float getX() {
+    public int getX() {
         return this.x;
     }
 
@@ -19,7 +19,7 @@ public class MapElement {
         this.x = x;
     }
 
-    public float getY() {
+    public int getY() {
         return this.y;
     }
 

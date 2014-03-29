@@ -2,6 +2,7 @@ package game.entities;
 
 public class Door extends DestructibleElement{
 	
+	public static final int ID = 3;
 	private boolean open;
 
 	public Door(int x, int y) {

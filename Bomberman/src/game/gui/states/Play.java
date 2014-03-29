@@ -1,27 +1,29 @@
 package game.gui.states;
 
+import game.entities.Direction;
+import game.entities.Door;
 import game.entities.Map;
-import game.entities.Player;
 import game.entities.SolidWall;
+import game.entityImps.IPlayerIMP;
+import game.gui.camera.Camera;
+import game.gui.painter.ElementPainter;
+import game.gui.test.Game;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.SpriteSheet;
-import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 public class Play extends BasicGameState {
 	
 	private Map map;
-	private Player player;
-//	private SpriteSheet sheet;
-//	private Image worldMap;
-//	private Vector2f playerPos;
-	
+	private ElementPainter painter;
+	private int delta;
+	private Camera cam;
 	
 	public Play(int state){
 		
@@ -30,35 +32,13 @@ public class Play extends BasicGameState {
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg)
 			throws SlickException {
-		map = new Map();
-		initMap();
-//		worldMap = new Image("res/795fb084cb.png");
-//		sheet = new SpriteSheet("res/player.png", 32, 32);
-//		
-//		movingUp = new Animation();
-//		movingUp.setAutoUpdate(false);
-//		
-//		movingDown = new Animation();
-//		movingDown.setAutoUpdate(false);
-//		
-//		movingLeft = new Animation();
-//		movingLeft.setAutoUpdate(false);
-//		
-//		movingRight = new Animation();
-//		movingRight.setAutoUpdate(false);
-//		
-//		for (int col = 0; col < 3; col++) {
-//			movingUp.addFrame(sheet.getSprite(col, 3), 150);
-//			movingDown.addFrame(sheet.getSprite(col, 0), 150);
-//			movingLeft.addFrame(sheet.getSprite(col, 1), 150);
-//			movingRight.addFrame(sheet.getSprite(col, 2), 150);
-//		}
-//		movingDown.setCurrentFrame(1);
-//		player = movingDown;
-//		playerPos = new Vector2f(gc.getWidth() / 2, gc.getHeight() / 2);
+		map = new Map(32, 21);
+		initMap(sbg);
+		cam = new Camera(gc, map);
+		painter = new ElementPainter(map, cam, new Image("res/solidWall.png"), new Image("res/brickWall.png"), null, new Image("res/solidWall.png"), null, new Image("res/player.png"), null);
 	}
 
-	private void initMap() {
+	private void initMap(StateBasedGame sbg) {
 		// TODO Auto-generated method stub
 		int tileCountY = 21;
 		int tileCountX = 31;
@@ -73,49 +53,39 @@ public class Play extends BasicGameState {
 			}
 		}
 		
-		map.setPlayer(player);
+		map.setPlayer(new IPlayerIMP(1, 1, Direction.Down, sbg));
+		map.setDoor(new Door(7, 1));
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
 			throws SlickException {
-		
-//		worldMap.draw();
-//		g.drawString("Play", gc.getWidth() / 2, 50);
-//		player.draw(playerPos.x, playerPos.y);
+		g.setBackground(new Color(59, 121, 1));
+		painter.draw(delta, g);
+		g.drawString("X: " + cam.getCameraX() + " Y: " + cam.getCameraY(), 300, 10);
 	}
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta)
 			throws SlickException {
+		this.delta = delta;
 		Input input = gc.getInput();
-		//input.disableKeyRepeat();
 		
-//		if(!input.isKeyDown(Input.KEY_DOWN) && !input.isKeyDown(Input.KEY_UP) && !input.isKeyDown(Input.KEY_LEFT) && !input.isKeyDown(Input.KEY_RIGHT)){
-//			player.setAutoUpdate(false);
-//			player.setCurrentFrame(1);
-//		}else{
-//			if(input.isKeyDown(Input.KEY_DOWN)){
-//				player = movingDown;
-//				player.setAutoUpdate(true);
-//				playerPos.y += delta * .1f; 
-//			}
-//			if(input.isKeyDown(Input.KEY_UP)){
-//				player = movingUp;
-//				player.setAutoUpdate(true);
-//				playerPos.y -= delta * .1f; 
-//			}
-//			if(input.isKeyDown(Input.KEY_LEFT)){
-//				player = movingLeft;
-//				player.setAutoUpdate(true);
-//				playerPos.x -= delta * .1f; 
-//			}
-//			if(input.isKeyDown(Input.KEY_RIGHT)){
-//				player = movingRight;
-//				player.setAutoUpdate(true);
-//				playerPos.x += delta * .1f; 
-//			}
-//		}
+		IPlayerIMP player = (IPlayerIMP) map.getPlayer();
+		
+		if(input.isKeyDown(Input.KEY_UP)){
+			player.move(Direction.Up);
+		}if (input.isKeyDown(Input.KEY_DOWN)) {
+			player.move(Direction.Down);
+		}if (input.isKeyDown(Input.KEY_LEFT)) {
+			player.move(Direction.Left);
+		}if (input.isKeyDown(Input.KEY_RIGHT)) {
+			player.move(Direction.Right);
+		}if(input.isKeyDown(Input.KEY_SPACE)){
+			map.getDoor().open();
+		}
+		player.update(map, delta);
+		cam.centerOn(map.getPlayer().getX() * Game.TILESIZE, map.getPlayer().getY() * Game.TILESIZE);
 	}
 
 	@Override

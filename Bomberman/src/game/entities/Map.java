@@ -1,7 +1,8 @@
 package game.entities;
 
+import game.gui.test.Game;
+
 import java.util.LinkedList;
-import java.util.ListIterator;
 
 // We are going to be using LinkedList implementation of list because as it is stated the web-site bellow
 // http://www.java-gaming.org/index.php?topic=27017.0
@@ -16,8 +17,11 @@ public class Map {
 	//private LinkedList<Player> players;					//for multiplayer purposes **later**
 	private Door door;
 	private Player player;									//single player for now
+	private int[][] colMap;
+	private int tileCountX;
+	private int tileCountY;
 	
-	public Map() {
+	public Map(int tileCountX, int tileCountY) {
 		solidWalls = new LinkedList<SolidWall>();
 		
 		brickWalls = new LinkedList<BrickWall>();
@@ -27,6 +31,10 @@ public class Map {
 		explosions = new LinkedList<Explosion>();
 		
 		powerUpElements = new LinkedList<PowerUpElement>();
+		this.tileCountX = tileCountX;
+		this.tileCountY = tileCountY;
+		
+		colMap = new int[tileCountY][tileCountX];
 		
 		//TODO init door later
 		
@@ -36,38 +44,15 @@ public class Map {
 
 	//TODO updates
 	
-	
-/*	private void init() {
-		// TODO Auto-generated method stub
-
-			
-			//temporary
-			player = new Player(1, 1, Direction.Down);
-	}*/
-	public void updatePlayer(){
-//		this.player.setActiveBombCount(player.getActiveBombCount());
-//		this.player.setDirection(player.getDirection());
-//		this.player.setScore(player.getScore());
-
-		ListIterator iterator = solidWalls.listIterator();
-		
-		while(iterator.hasNext()){
-			SolidWall solidWall = (SolidWall) iterator.next();
-			
-			if(solidWall.getX() == player.getX() && solidWall.getY() == player.getY()){
-				this.player.setX(player.getPrevX());
-				this.player.setY(player.getPrevY());
-				break;
-			}
-		}
-	}
 
 	public void addSolidWall(SolidWall solidWall){
 		solidWalls.add(solidWall);
+		colMap[solidWall.getY()][solidWall.getX()] = SolidWall.ID;
 	}
 	
 	public void setPlayer(Player player){
 		this.player = player;
+		colMap[player.getY()][player.getX()] = Player.ID;
 	}
 
 	public LinkedList<SolidWall> getSolidWalls() {
@@ -96,5 +81,27 @@ public class Map {
 
 	public Player getPlayer() {
 		return player;
+	}
+
+	public int[][] getColMap() {
+		return colMap;
+	}
+
+	public void setColMap(int[][] colMap) {
+		this.colMap = colMap;
+	}
+
+	public void setDoor(Door door) {
+		// TODO Auto-generated method stub
+		this.door = door;
+		colMap[door.getY()][door.getX()] = Door.ID;
+	}
+	
+	public int getWidth(){
+		return tileCountX * Game.TILESIZE;
+	}
+	
+	public int getHeight(){
+		return tileCountY * Game.TILESIZE;
 	}
 }
