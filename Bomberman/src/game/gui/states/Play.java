@@ -1,10 +1,11 @@
 package game.gui.states;
 
+import game.controllers.PlayerController;
 import game.entities.Direction;
 import game.entities.Door;
 import game.entities.Map;
+import game.entities.Player;
 import game.entities.SolidWall;
-import game.entityImps.IPlayerIMP;
 import game.gui.camera.Camera;
 import game.gui.painter.ElementPainter;
 import game.gui.test.Game;
@@ -26,6 +27,7 @@ public class Play extends BasicGameState {
 	private Camera cam;
 	private int tileCountY = 11;
 	private int tileCountX = 19;
+	private PlayerController playerController;
 	
 	public Play(int state){
 		
@@ -37,7 +39,8 @@ public class Play extends BasicGameState {
 		map = new Map(tileCountX, tileCountY);
 		initMap(sbg);
 		cam = new Camera(gc, map);
-		painter = new ElementPainter(map, cam, new Image("res/solidWall.png"), new Image("res/brickWall.png"), null, new Image("res/solidWall.png"), null, new Image("res/playerwalk.png"), null);
+		painter = new ElementPainter(map, cam, sbg, new Image("res/solidWall.png"), new Image("res/brickWall.png"), null, new Image("res/solidWall.png"), null, new Image("res/playerwalk.png"), null);
+		playerController = new PlayerController(map.getPlayer(), sbg);
 	}
 
 	private void initMap(StateBasedGame sbg) {
@@ -54,7 +57,7 @@ public class Play extends BasicGameState {
 			}
 		}
 		
-		map.setPlayer(new IPlayerIMP(1, 1, Direction.Down, sbg));
+		map.setPlayer(new Player(1, 1, Direction.Down));
 		map.setDoor(new Door(7, 1));
 	}
 
@@ -72,21 +75,20 @@ public class Play extends BasicGameState {
 		this.delta = delta;
 		Input input = gc.getInput();
 		
-		IPlayerIMP player = (IPlayerIMP) map.getPlayer();
-		
 		if(input.isKeyDown(Input.KEY_UP)){
-			player.move(Direction.Up);
+			playerController.move(Direction.Up);
 		}if (input.isKeyDown(Input.KEY_DOWN)) {
-			player.move(Direction.Down);
+			playerController.move(Direction.Down);
 		}if (input.isKeyDown(Input.KEY_LEFT)) {
-			player.move(Direction.Left);
+			playerController.move(Direction.Left);
 		}if (input.isKeyDown(Input.KEY_RIGHT)) {
-			player.move(Direction.Right);
+			playerController.move(Direction.Right);
 		}if(input.isKeyDown(Input.KEY_SPACE)){
 			map.getDoor().open();
 		}
-		player.update(map, delta);
-		cam.centerOn(((IPlayerIMP) map.getPlayer()).getRealX() * Game.TILESIZE, ((IPlayerIMP) map.getPlayer()).getRealY() * Game.TILESIZE);
+		
+		playerController.update(map, delta);
+		cam.centerOn(playerController.getRealX() * Game.TILESIZE, playerController.getRealY() * Game.TILESIZE);
 	}
 
 	@Override
@@ -95,5 +97,8 @@ public class Play extends BasicGameState {
 	}
 	public ElementPainter getElementPainter(){
 		return painter;
+	}
+	public PlayerController getPlayerController(){
+		return playerController;
 	}
 }

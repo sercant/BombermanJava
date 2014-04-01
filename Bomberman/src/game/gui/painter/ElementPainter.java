@@ -1,12 +1,13 @@
 package game.gui.painter;
 
+import game.controllers.PlayerController;
 import game.entities.Direction;
 import game.entities.Door;
 import game.entities.Map;
 import game.entities.MapElement;
 import game.entities.SolidWall;
-import game.entityImps.IPlayerIMP;
 import game.gui.camera.Camera;
+import game.gui.states.Play;
 import game.gui.test.Game;
 
 import java.util.LinkedList;
@@ -19,6 +20,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.fills.GradientFill;
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.state.StateBasedGame;
 
 public class ElementPainter {
 	//replace this part with sprites
@@ -40,12 +42,13 @@ public class ElementPainter {
 	
 	private Camera cam;
 	private Map map;
+	private StateBasedGame sbg;
 	private int delta;
 	private Graphics g;
 	private float topShift;
 	private float sideShift;
 	
-	public ElementPainter(Map map, Camera cam, Image solidWallIMG, Image brickWallIMG, Image bombIMG, Image doorIMG, Image explosionIMG, Image playerIMG, Image powerUpIMG){
+	public ElementPainter(Map map, Camera cam, StateBasedGame sbg, Image solidWallIMG, Image brickWallIMG, Image bombIMG, Image doorIMG, Image explosionIMG, Image playerIMG, Image powerUpIMG){
 		this.solidWallIMG = filterAndScale(solidWallIMG);
 		this.brickWallIMG = filterAndScale(brickWallIMG);
 		this.bombIMG = filterAndScale(bombIMG);
@@ -67,7 +70,7 @@ public class ElementPainter {
 		topRectFill = new GradientFill(0, 0, Color.gray, topRect.getMaxX(), topRect.getMaxY(), Color.gray);
 		topSpacing = Game.TILESIZE;
 		
-		
+		this.sbg = sbg;
 		//sprite init
 	}
 	
@@ -106,7 +109,7 @@ public class ElementPainter {
 			drawElement(doorIMG, door);
 		}
 		
-		IPlayerIMP player = (IPlayerIMP) map.getPlayer();
+		PlayerController player = ((Play) sbg.getCurrentState()).getPlayerController();
 		
 		if(player != null){
 			g.setColor(Color.black);
@@ -116,8 +119,8 @@ public class ElementPainter {
 		
 		//Top info
 		g.fill(topRect, topRectFill);//fix 800 later to game width
-		g.drawString("LIVES: " + player.getLives(), 20, topRect.getHeight() / 2);
-		g.drawString("SCORE: " + player.getScore(), 200, topRect.getHeight() / 2);
+		g.drawString("LIVES: " + map.getPlayer().getLives(), 20, topRect.getHeight() / 2);
+		g.drawString("SCORE: " + map.getPlayer().getScore(), 200, topRect.getHeight() / 2);
 	}
 	
 	private void drawElement(Image i, MapElement e){

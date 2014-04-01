@@ -1,4 +1,4 @@
-package game.entityImps;
+package game.controllers;
 
 import game.entities.Direction;
 import game.entities.Door;
@@ -8,69 +8,65 @@ import game.entities.PowerUp;
 import game.entities.SolidWall;
 import game.gui.states.Play;
 import game.gui.test.Game;
-import game.interfaces.IPlayer;
+import game.interfaces.IPlayerController;
 
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
-public class IPlayerIMP extends Player implements IPlayer {
+public class PlayerController implements IPlayerController {
 
 	private Map map;
+	private StateBasedGame game;
+	private Player player;
 	private float moveTimer;
 	private float smoothShift;
-	private StateBasedGame game;
 	private float realX;
 	private float realY;
 	
-	public IPlayerIMP(int x, int y, Direction dir, StateBasedGame game) {
-		super(x, y, dir);
-		// TODO Auto-generated constructor stub
+	public PlayerController(Player player, StateBasedGame game) {
+		this.player = player;
 		resetMoveTimer();
 		this.game = game;
-		realX = x;
-		realY = y;
+		realX = player.getX();
+		realY = player.getY();
 		smoothShift = 0;
-	}
-
-	public IPlayerIMP(int x, int y, Direction dir, int lifeCount,
-			int bombCount, int explosionRange, float moveSpeed) {
-		super(x, y, dir, lifeCount, bombCount, explosionRange, moveSpeed);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void update(Map map, int delta) {
 		// TODO Auto-generated method stub
+		int playerX = player.getX();
+		int playerY = player.getY();
 		this.map = map;
 		int[][] colMap = map.getColMap();
-		if(isMoving()){
-			((Play) game.getCurrentState()).getElementPainter().startPlayerAnim(getCurrentDir());
+		if(player.isMoving()){
+			((Play) game.getCurrentState()).getElementPainter().startPlayerAnim(player.getCurrentDir());
 		}else
-			((Play) game.getCurrentState()).getElementPainter().stopPlayerAnim(getCurrentDir());
+			((Play) game.getCurrentState()).getElementPainter().stopPlayerAnim(player.getCurrentDir());
 		
-		if(isMoving()){
+		if(player.isMoving()){
 			moveTimer -= delta;
-			smoothShift =(float) delta / ((float)300.f / getMoveSpeed());
+			smoothShift = (float) delta / getMoveTime();
 			
-			if(realX > getX())
+			if(realX > playerX)
 				realX -= smoothShift;
-			else if(realX < getX())
+			else if(realX < playerX)
 				realX += smoothShift;
-			if(realY > getY())
+			if(realY > playerY)
 				realY -= smoothShift;
-			else if(realY < getY())
+			else if(realY < playerY)
 				realY += smoothShift;
 			
 			if(moveTimer < 0){
-				setMoving(false);
+				player.setMoving(false);
 				resetMoveTimer();
 				smoothShift = 0;
-				realX = getX();
-				realY = getY();
+				realX = playerX;
+				realY = playerY;
 			}
 		}
 		
-		if(colMap[getY()][getX()] == Door.ID && map.getDoor().isOpen()){
+		if(colMap[playerY][playerX] == Door.ID && map.getDoor().isOpen()){
 			try {
 				game.getCurrentState().init(game.getContainer(), game);
 				game.enterState(Game.menu);
@@ -83,59 +79,55 @@ public class IPlayerIMP extends Player implements IPlayer {
 
 	private void resetMoveTimer() {
 		// TODO Auto-generated method stub
-		moveTimer = 300.f / getMoveSpeed();
+		moveTimer = getMoveTime();
+	}
+	
+	private float getMoveTime(){
+		return (float) 300.f / player.getMoveSpeed();
 	}
 
 	@Override
 	public void move(Direction dir) {
 		// TODO Auto-generated method stub
 		int[][] colMap = map.getColMap();
-		int x = this.getX(), y = this.getY();
+		int x = player.getX(), y = player.getY();
 		
-		if(!isMoving() && dir == Direction.Up && colMap[y-1][x] != SolidWall.ID){
-			setMoving(true);
-			setCurrentDir(Direction.Up);
-			setY(y-1);
+		if(!player.isMoving() && dir == Direction.Up && colMap[y-1][x] != SolidWall.ID){
+			player.setMoving(true);
+			player.setCurrentDir(Direction.Up);
+			player.setY(y-1);
 			if(colMap[y][x] == Player.ID)
 				colMap[y][x] = 0;
 			if(colMap[y-1][x] != Door.ID)
 				colMap[y-1][x] = Player.ID;
 			map.setColMap(colMap);
-		}else if(!isMoving() && dir == Direction.Down && colMap[y+1][x] != SolidWall.ID){
-			setMoving(true);
-			setCurrentDir(Direction.Down);
-			setY(y+1);
+		}else if(!player.isMoving() && dir == Direction.Down && colMap[y+1][x] != SolidWall.ID){
+			player.setMoving(true);
+			player.setCurrentDir(Direction.Down);
+			player.setY(y+1);
 			if(colMap[y][x] == Player.ID)
 				colMap[y][x] = 0;
 			if(colMap[y+1][x] != Door.ID)
 				colMap[y+1][x] = Player.ID;
 			map.setColMap(colMap);
-		}else if(!isMoving() && dir == Direction.Left && colMap[y][x-1] != SolidWall.ID){
-			setMoving(true);
-			setCurrentDir(Direction.Left);
-			setX(x-1);
+		}else if(!player.isMoving() && dir == Direction.Left && colMap[y][x-1] != SolidWall.ID){
+			player.setMoving(true);
+			player.setCurrentDir(Direction.Left);
+			player.setX(x-1);
 			if(colMap[y][x] == Player.ID)
 				colMap[y][x] = 0;
 			if(colMap[y][x-1] != Door.ID)
 				colMap[y][x-1] = Player.ID;
 			map.setColMap(colMap);
-		}else if(!isMoving() && dir == Direction.Right && colMap[y][x+1] != SolidWall.ID){
-			setMoving(true);
-			setCurrentDir(Direction.Right);
-			setX(x+1);
+		}else if(!player.isMoving() && dir == Direction.Right && colMap[y][x+1] != SolidWall.ID){
+			player.setMoving(true);
+			player.setCurrentDir(Direction.Right);
+			player.setX(x+1);
 			if(colMap[y][x] == Player.ID)
 				colMap[y][x] = 0;
 			if(colMap[y][x+1] != Door.ID)
 				colMap[y][x+1] = Player.ID;
 			map.setColMap(colMap);
-		}
-	}
-	
-	@Override
-	public void powerUp(PowerUp power){
-		super.powerUp(power);
-		if(power == PowerUp.Speed){
-			resetMoveTimer();
 		}
 	}
 
