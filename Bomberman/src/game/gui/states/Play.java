@@ -23,7 +23,6 @@ public class Play extends BasicGameState {
 	
 	private Map map;
 	private ElementPainter painter;
-	private int delta;
 	private Camera cam;
 	private int tileCountY = 11;
 	private int tileCountX = 19;
@@ -65,14 +64,13 @@ public class Play extends BasicGameState {
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
 			throws SlickException {
 		g.setBackground(new Color(59, 121, 1));
-		painter.draw(delta, g);
+		painter.draw(g);
 		g.drawString("X: " + cam.getCameraX() + " Y: " + cam.getCameraY(), 300, 10);
 	}
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta)
 			throws SlickException {
-		this.delta = delta;
 		Input input = gc.getInput();
 		
 		if(input.isKeyDown(Input.KEY_UP)){

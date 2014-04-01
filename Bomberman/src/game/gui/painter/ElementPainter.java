@@ -43,7 +43,6 @@ public class ElementPainter {
 	private Camera cam;
 	private Map map;
 	private StateBasedGame sbg;
-	private int delta;
 	private Graphics g;
 	private float topShift;
 	private float sideShift;
@@ -82,8 +81,7 @@ public class ElementPainter {
 			return null;
 	}
 	
-	public void draw(int delta, Graphics g) {
-		this.delta = delta;
+	public void draw(Graphics g) {
 		this.g = g;
 		topShift = topSpacing - cam.getCameraY();
 		sideShift = -cam.getCameraX();

@@ -7,7 +7,6 @@ import game.models.Direction;
 import game.models.Door;
 import game.models.Map;
 import game.models.Player;
-import game.models.PowerUp;
 import game.models.SolidWall;
 
 import org.newdawn.slick.SlickException;
