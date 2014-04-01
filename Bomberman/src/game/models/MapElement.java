@@ -1,4 +1,4 @@
-package game.entities;
+package game.models;
 
 
 public class MapElement {

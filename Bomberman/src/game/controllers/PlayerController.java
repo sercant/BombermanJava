@@ -1,14 +1,14 @@
 package game.controllers;
 
-import game.entities.Direction;
-import game.entities.Door;
-import game.entities.Map;
-import game.entities.Player;
-import game.entities.PowerUp;
-import game.entities.SolidWall;
+import game.controllers.interfaces.IPlayerController;
 import game.gui.states.Play;
 import game.gui.test.Game;
-import game.interfaces.IPlayerController;
+import game.models.Direction;
+import game.models.Door;
+import game.models.Map;
+import game.models.Player;
+import game.models.PowerUp;
+import game.models.SolidWall;
 
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;

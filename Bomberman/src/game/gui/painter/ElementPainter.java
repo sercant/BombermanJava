@@ -1,14 +1,14 @@
 package game.gui.painter;
 
 import game.controllers.PlayerController;
-import game.entities.Direction;
-import game.entities.Door;
-import game.entities.Map;
-import game.entities.MapElement;
-import game.entities.SolidWall;
 import game.gui.camera.Camera;
 import game.gui.states.Play;
 import game.gui.test.Game;
+import game.models.Direction;
+import game.models.Door;
+import game.models.Map;
+import game.models.MapElement;
+import game.models.SolidWall;
 
 import java.util.LinkedList;
 import java.util.ListIterator;

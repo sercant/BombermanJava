@@ -1,6 +1,6 @@
 package game.gui.camera;
 
-import game.entities.Map;
+import game.models.Map;
 
 import org.newdawn.slick.GameContainer;
 

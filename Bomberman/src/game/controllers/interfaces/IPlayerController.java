@@ -1,7 +1,7 @@
-package game.interfaces;
+package game.controllers.interfaces;
 
-import game.entities.Direction;
-import game.entities.Map;
+import game.models.Direction;
+import game.models.Map;
 
 public interface IPlayerController {
 	public void update(Map map, int delta);

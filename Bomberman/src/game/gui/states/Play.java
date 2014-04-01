@@ -1,14 +1,14 @@
 package game.gui.states;
 
 import game.controllers.PlayerController;
-import game.entities.Direction;
-import game.entities.Door;
-import game.entities.Map;
-import game.entities.Player;
-import game.entities.SolidWall;
 import game.gui.camera.Camera;
 import game.gui.painter.ElementPainter;
 import game.gui.test.Game;
+import game.models.Direction;
+import game.models.Door;
+import game.models.Map;
+import game.models.Player;
+import game.models.SolidWall;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;

@@ -1,4 +1,4 @@
-package game.entities;
+package game.models;
 
 import game.gui.test.Game;
 

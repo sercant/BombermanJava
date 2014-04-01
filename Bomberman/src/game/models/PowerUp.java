@@ -1,4 +1,4 @@
-package game.entities;
+package game.models;
 
 public enum PowerUp {
 	Speed, 
