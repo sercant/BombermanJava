@@ -102,6 +102,6 @@ public class Map {
 	}
 	
 	public int getHeight(){
-		return tileCountY * Game.TILESIZE;
+		return tileCountY * Game.TILESIZE + Game.TILESIZE;
 	}
 }

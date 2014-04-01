@@ -6,6 +6,7 @@ import game.entities.Map;
 import game.entities.Player;
 import game.entities.PowerUp;
 import game.entities.SolidWall;
+import game.gui.states.Play;
 import game.gui.test.Game;
 import game.interfaces.IPlayer;
 
@@ -16,13 +17,19 @@ public class IPlayerIMP extends Player implements IPlayer {
 
 	private Map map;
 	private float moveTimer;
+	private float smoothShift;
 	private StateBasedGame game;
+	private float realX;
+	private float realY;
 	
 	public IPlayerIMP(int x, int y, Direction dir, StateBasedGame game) {
 		super(x, y, dir);
 		// TODO Auto-generated constructor stub
 		resetMoveTimer();
 		this.game = game;
+		realX = x;
+		realY = y;
+		smoothShift = 0;
 	}
 
 	public IPlayerIMP(int x, int y, Direction dir, int lifeCount,
@@ -36,14 +43,33 @@ public class IPlayerIMP extends Player implements IPlayer {
 		// TODO Auto-generated method stub
 		this.map = map;
 		int[][] colMap = map.getColMap();
+		if(isMoving()){
+			((Play) game.getCurrentState()).getElementPainter().startPlayerAnim(getCurrentDir());
+		}else
+			((Play) game.getCurrentState()).getElementPainter().stopPlayerAnim(getCurrentDir());
 		
 		if(isMoving()){
 			moveTimer -= delta;
+			smoothShift =(float) delta / ((float)300.f / getMoveSpeed());
+			
+			if(realX > getX())
+				realX -= smoothShift;
+			else if(realX < getX())
+				realX += smoothShift;
+			if(realY > getY())
+				realY -= smoothShift;
+			else if(realY < getY())
+				realY += smoothShift;
+			
 			if(moveTimer < 0){
 				setMoving(false);
 				resetMoveTimer();
+				smoothShift = 0;
+				realX = getX();
+				realY = getY();
 			}
 		}
+		
 		if(colMap[getY()][getX()] == Door.ID && map.getDoor().isOpen()){
 			try {
 				game.getCurrentState().init(game.getContainer(), game);
@@ -68,6 +94,7 @@ public class IPlayerIMP extends Player implements IPlayer {
 		
 		if(!isMoving() && dir == Direction.Up && colMap[y-1][x] != SolidWall.ID){
 			setMoving(true);
+			setCurrentDir(Direction.Up);
 			setY(y-1);
 			if(colMap[y][x] == Player.ID)
 				colMap[y][x] = 0;
@@ -76,6 +103,7 @@ public class IPlayerIMP extends Player implements IPlayer {
 			map.setColMap(colMap);
 		}else if(!isMoving() && dir == Direction.Down && colMap[y+1][x] != SolidWall.ID){
 			setMoving(true);
+			setCurrentDir(Direction.Down);
 			setY(y+1);
 			if(colMap[y][x] == Player.ID)
 				colMap[y][x] = 0;
@@ -84,6 +112,7 @@ public class IPlayerIMP extends Player implements IPlayer {
 			map.setColMap(colMap);
 		}else if(!isMoving() && dir == Direction.Left && colMap[y][x-1] != SolidWall.ID){
 			setMoving(true);
+			setCurrentDir(Direction.Left);
 			setX(x-1);
 			if(colMap[y][x] == Player.ID)
 				colMap[y][x] = 0;
@@ -92,6 +121,7 @@ public class IPlayerIMP extends Player implements IPlayer {
 			map.setColMap(colMap);
 		}else if(!isMoving() && dir == Direction.Right && colMap[y][x+1] != SolidWall.ID){
 			setMoving(true);
+			setCurrentDir(Direction.Right);
 			setX(x+1);
 			if(colMap[y][x] == Player.ID)
 				colMap[y][x] = 0;
@@ -108,4 +138,13 @@ public class IPlayerIMP extends Player implements IPlayer {
 			resetMoveTimer();
 		}
 	}
+
+	public float getRealX() {
+		return realX;
+	}
+
+	public float getRealY() {
+		return realY;
+	}
+	
 }

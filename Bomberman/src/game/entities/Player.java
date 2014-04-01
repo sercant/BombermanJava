@@ -22,7 +22,7 @@ public class Player extends DynamicElement{
 	private int score;
 	
 	public Player(int x, int y, Direction dir){
-		this( x, y, dir, 3, 1, 1, .5f);
+		this( x, y, dir, 3, 1, 1, .6f);
 	}
 	
 	public Player(int x, int y, Direction dir, int lifeCount, int bombCount, int explosionRange, float moveSpeed) {

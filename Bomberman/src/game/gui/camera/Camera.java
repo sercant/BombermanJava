@@ -30,15 +30,15 @@ public class Camera {
 	public void centerOn(float x, float y) {
 	//try to set the given position as center of the camera by default
 		cameraX = x - gc.getWidth()  / 2;
-		cameraY = y - gc.getHeight() / 2;
+		cameraY = y - gc.getHeight() / 2; // this is for top spacing
 		
 		//if the camera is at the right or left edge lock it to prevent a black bar
 		if(cameraX < 0) cameraX = 0;
-		if(cameraX + gc.getWidth() > mapWidth) cameraX = mapWidth - gc.getWidth();
+		if(cameraX + gc.getWidth() >= mapWidth) cameraX = mapWidth - gc.getWidth() ;
 		
 		//if the camera is at the top or bottom edge lock it to prevent a black bar
 		if(cameraY < 0) cameraY = 0;
-		if(cameraY + gc.getHeight() > mapHeight) cameraY = mapHeight - gc.getHeight();
+		if(cameraY + gc.getHeight() >= mapHeight) cameraY = mapHeight - gc.getHeight() ;
 	}
 
 	public float getCameraX() {

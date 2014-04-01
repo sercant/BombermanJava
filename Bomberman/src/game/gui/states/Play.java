@@ -24,6 +24,8 @@ public class Play extends BasicGameState {
 	private ElementPainter painter;
 	private int delta;
 	private Camera cam;
+	private int tileCountY = 11;
+	private int tileCountX = 19;
 	
 	public Play(int state){
 		
@@ -32,16 +34,15 @@ public class Play extends BasicGameState {
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg)
 			throws SlickException {
-		map = new Map(32, 21);
+		map = new Map(tileCountX, tileCountY);
 		initMap(sbg);
 		cam = new Camera(gc, map);
-		painter = new ElementPainter(map, cam, new Image("res/solidWall.png"), new Image("res/brickWall.png"), null, new Image("res/solidWall.png"), null, new Image("res/player.png"), null);
+		painter = new ElementPainter(map, cam, new Image("res/solidWall.png"), new Image("res/brickWall.png"), null, new Image("res/solidWall.png"), null, new Image("res/playerwalk.png"), null);
 	}
 
 	private void initMap(StateBasedGame sbg) {
 		// TODO Auto-generated method stub
-		int tileCountY = 21;
-		int tileCountX = 31;
+		
 		for (int i = 0; i < tileCountY; i++)
 		{
 			for (int j = 0; j < tileCountX; j++)
@@ -85,11 +86,14 @@ public class Play extends BasicGameState {
 			map.getDoor().open();
 		}
 		player.update(map, delta);
-		cam.centerOn(map.getPlayer().getX() * Game.TILESIZE, map.getPlayer().getY() * Game.TILESIZE);
+		cam.centerOn(((IPlayerIMP) map.getPlayer()).getRealX() * Game.TILESIZE, ((IPlayerIMP) map.getPlayer()).getRealY() * Game.TILESIZE);
 	}
 
 	@Override
 	public int getID() {
 		return 1;
+	}
+	public ElementPainter getElementPainter(){
+		return painter;
 	}
 }
