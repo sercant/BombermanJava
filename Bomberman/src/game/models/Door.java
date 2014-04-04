@@ -2,11 +2,10 @@ package game.models;
 
 public class Door extends DestructibleElement{
 	
-	public static final int ID = 3;
 	private boolean open;
 
 	public Door(int x, int y) {
-		super(x, y);
+		super(x, y, ElementType.Door);
 		// TODO Auto-generated constructor stub
 		this.open = false;
 	}

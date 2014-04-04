@@ -2,13 +2,14 @@ package game.models;
 
 
 public class MapElement {
-	
+	private ElementType type;
 	private int x;
 	private int y;
 	
-    public MapElement(int x, int y) {
+    public MapElement(int x, int y, ElementType type) {
         this.x = x;
         this.y = y;
+        this.type = type;
     }
 
     public int getX() {
@@ -25,5 +26,9 @@ public class MapElement {
 
     public void setY(int y) {
         this.y = y;
+    }
+    
+    public ElementType getType(){
+    	return type;
     }
 }

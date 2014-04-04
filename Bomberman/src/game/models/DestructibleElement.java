@@ -5,8 +5,8 @@ public class DestructibleElement extends MapElement{
 	private boolean destroyed;
 
 	
-	public DestructibleElement(int x, int y) {
-		super(x, y);
+	public DestructibleElement(int x, int y, ElementType type) {
+		super(x, y, type);
 		// TODO Auto-generated constructor stub
 	}
 

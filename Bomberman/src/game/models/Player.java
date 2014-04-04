@@ -3,7 +3,6 @@ package game.models;
 
 public class Player extends DynamicElement{
 
-	public static final int ID = 2;
 	//life count
 	private int lives;
 	//bombCount
@@ -27,7 +26,7 @@ public class Player extends DynamicElement{
 	
 	public Player(int x, int y, Direction dir, int lifeCount, int bombCount, int explosionRange, float moveSpeed) {
 
-		super(x, y, dir);
+		super(x, y, ElementType.Player, dir);
 		
 		lives = lifeCount;
 		
@@ -113,10 +112,6 @@ public class Player extends DynamicElement{
 
 	public void setMoving(boolean moving) {
 		this.moving = moving;
-	}
-
-	public static int getId() {
-		return ID;
 	}
 
 	public void setLives(int lives) {

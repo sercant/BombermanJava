@@ -6,8 +6,8 @@ public class DynamicElement extends MapElement{
 	private int prevY;
 	private Direction currentDir;
 	
-	public DynamicElement(int x, int y, Direction dir) {
-		super(x, y);
+	public DynamicElement(int x, int y, ElementType type, Direction dir) {
+		super(x, y, type);
 		// TODO Auto-generated constructor stub
 		prevX = x;
 		prevY = y;

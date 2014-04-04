@@ -85,7 +85,7 @@ public class Play extends BasicGameState {
 			map.getDoor().open();
 		}
 		
-		playerController.update(map, delta);
+		playerController.update(delta);
 		cam.centerOn(playerController.getRealX() * Game.TILESIZE, playerController.getRealY() * Game.TILESIZE);
 	}
 
@@ -98,5 +98,8 @@ public class Play extends BasicGameState {
 	}
 	public PlayerController getPlayerController(){
 		return playerController;
+	}
+	public Map getMap(){
+		return map;
 	}
 }

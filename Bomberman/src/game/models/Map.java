@@ -17,7 +17,7 @@ public class Map {
 	//private LinkedList<Player> players;					//for multiplayer purposes **later**
 	private Door door;
 	private Player player;									//single player for now
-	private int[][] colMap;
+	private Cell[][] colMap;
 	private int tileCountX;
 	private int tileCountY;
 	
@@ -33,8 +33,12 @@ public class Map {
 		powerUpElements = new LinkedList<PowerUpElement>();
 		this.tileCountX = tileCountX;
 		this.tileCountY = tileCountY;
-		
-		colMap = new int[tileCountY][tileCountX];
+		colMap = new Cell[tileCountY][tileCountX];
+		for(int i=0; i < tileCountY; i++){
+			for(int j=0; j < tileCountX; j++){
+				colMap[i][j] = new Cell();
+			}
+		}
 		
 		//TODO init door later
 		
@@ -47,12 +51,12 @@ public class Map {
 
 	public void addSolidWall(SolidWall solidWall){
 		solidWalls.add(solidWall);
-		colMap[solidWall.getY()][solidWall.getX()] = SolidWall.ID;
+		colMap[solidWall.getY()][solidWall.getX()].addElement(solidWall);
 	}
 	
 	public void setPlayer(Player player){
 		this.player = player;
-		colMap[player.getY()][player.getX()] = Player.ID;
+		colMap[player.getY()][player.getX()].addElement(player);;
 	}
 
 	public LinkedList<SolidWall> getSolidWalls() {
@@ -83,18 +87,10 @@ public class Map {
 		return player;
 	}
 
-	public int[][] getColMap() {
-		return colMap;
-	}
-
-	public void setColMap(int[][] colMap) {
-		this.colMap = colMap;
-	}
-
 	public void setDoor(Door door) {
 		// TODO Auto-generated method stub
 		this.door = door;
-		colMap[door.getY()][door.getX()] = Door.ID;
+		colMap[door.getY()][door.getX()].addElement(door);
 	}
 	
 	public int getWidth(){
@@ -103,5 +99,13 @@ public class Map {
 	
 	public int getHeight(){
 		return tileCountY * Game.TILESIZE + Game.TILESIZE;
+	}
+	public Cell getCellAt(int x, int y){
+		Cell cell;
+		if(x < tileCountX && x >= 0 && y < tileCountY && y >= 0)
+			cell = colMap[y][x];
+		else
+			cell = null;
+		return cell;
 	}
 }
