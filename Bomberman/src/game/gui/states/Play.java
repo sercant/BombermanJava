@@ -37,7 +37,7 @@ public class Play extends BasicGameState {
 			throws SlickException {
 		map = new Map(tileCountX, tileCountY);
 		initMap(sbg);
-		cam = new Camera(gc, map);
+		cam = new Camera(gc, map.getWidth(), map.getHeight());
 		painter = new ElementPainter(map, cam, sbg, new Image("res/solidWall.png"), new Image("res/brickWall.png"), null, new Image("res/door.png"), null, new Image("res/playerwalk.png"), null);
 		playerController = new PlayerController(map.getPlayer(), sbg);
 	}

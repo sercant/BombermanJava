@@ -1,7 +1,7 @@
 package game.models;
 
 
-public class Player extends DynamicElement{
+public class Player extends MapElement{
 
 	//life count
 	private int lives;
@@ -19,6 +19,7 @@ public class Player extends DynamicElement{
 	private boolean moving;
 	
 	private int score;
+	private Direction currentDir;
 	
 	public Player(int x, int y, Direction dir){
 		this( x, y, dir, 3, 1, 1, .6f);
@@ -26,7 +27,7 @@ public class Player extends DynamicElement{
 	
 	public Player(int x, int y, Direction dir, int lifeCount, int bombCount, int explosionRange, float moveSpeed) {
 
-		super(x, y, ElementType.Player, dir);
+		super(x, y, ElementType.Player);
 		
 		lives = lifeCount;
 		
@@ -41,6 +42,8 @@ public class Player extends DynamicElement{
 		moving = false;
 		
 		score = 0;
+		
+		currentDir = dir;
 	}
 	
 	public void kill(){
@@ -134,4 +137,11 @@ public class Player extends DynamicElement{
 		this.alive = alive;
 	}
 	
+	public Direction getCurrentDir() {
+		return currentDir;
+	}
+
+	public void setCurrentDir(Direction currentDir) {
+		this.currentDir = currentDir;
+	}
 }

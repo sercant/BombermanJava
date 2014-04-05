@@ -1,28 +1,23 @@
 package game.gui.camera;
 
-import game.models.Map;
-
 import org.newdawn.slick.GameContainer;
 
 public class Camera {
 	
-	protected float cameraX;
+	private float cameraX;
 	
-	protected float cameraY;
+	private float cameraY;
 	
-	protected GameContainer gc;
+	private GameContainer gc;
 	
-	protected int mapHeight;
+	private int mapHeight;
 	
-	protected int mapWidth;
+	private int mapWidth;
 	
-	protected Map map;
-	
-	public Camera(GameContainer gc, Map map) {
-		this.map = map;
-		  
-		this.mapWidth = map.getWidth();
-		this.mapHeight = map.getHeight();
+	public Camera(GameContainer gc, int mapWidth, int mapHeight) {
+		
+		this.mapWidth = mapWidth;
+		this.mapHeight = mapHeight;
 		  
 		this.gc = gc;
 	}
