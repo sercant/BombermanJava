@@ -38,10 +38,44 @@ public class Play extends BasicGameState {
 		map = new Map(tileCountX, tileCountY);
 		initMap(sbg);
 		cam = new Camera(gc, map);
-		painter = new ElementPainter(map, cam, sbg, new Image("res/solidWall.png"), new Image("res/brickWall.png"), null, new Image("res/solidWall.png"), null, new Image("res/playerwalk.png"), null);
+		painter = new ElementPainter(map, cam, sbg, new Image("res/solidWall.png"), new Image("res/brickWall.png"), null, new Image("res/door.png"), null, new Image("res/playerwalk.png"), null);
 		playerController = new PlayerController(map.getPlayer(), sbg);
 	}
 
+	@Override
+	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
+			throws SlickException {
+		g.setBackground(new Color(59, 121, 1));
+		painter.draw(g);
+		g.drawString("X: " + cam.getCameraX() + " Y: " + cam.getCameraY(), 300, 10);
+	}
+
+	@Override
+	public void update(GameContainer gc, StateBasedGame sbg, int delta)
+			throws SlickException {
+		Input input = gc.getInput();
+		
+		if(input.isKeyDown(Input.KEY_UP)){
+			playerController.movePlayer(Direction.Up);
+		}if (input.isKeyDown(Input.KEY_DOWN)) {
+			playerController.movePlayer(Direction.Down);
+		}if (input.isKeyDown(Input.KEY_LEFT)) {
+			playerController.movePlayer(Direction.Left);
+		}if (input.isKeyDown(Input.KEY_RIGHT)) {
+			playerController.movePlayer(Direction.Right);
+		}if(input.isKeyDown(Input.KEY_SPACE)){
+			map.getDoor().open();
+		}
+		
+		playerController.update(delta);
+		cam.centerOn(playerController.getRealX() * Game.TILESIZE, playerController.getRealY() * Game.TILESIZE);
+	}
+
+	@Override
+	public int getID() {
+		return 1;
+	}
+	
 	private void initMap(StateBasedGame sbg) {
 		// TODO Auto-generated method stub
 		
@@ -59,40 +93,7 @@ public class Play extends BasicGameState {
 		map.setPlayer(new Player(1, 1, Direction.Down));
 		map.setDoor(new Door(7, 1));
 	}
-
-	@Override
-	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
-			throws SlickException {
-		g.setBackground(new Color(59, 121, 1));
-		painter.draw(g);
-		g.drawString("X: " + cam.getCameraX() + " Y: " + cam.getCameraY(), 300, 10);
-	}
-
-	@Override
-	public void update(GameContainer gc, StateBasedGame sbg, int delta)
-			throws SlickException {
-		Input input = gc.getInput();
-		
-		if(input.isKeyDown(Input.KEY_UP)){
-			playerController.move(Direction.Up);
-		}if (input.isKeyDown(Input.KEY_DOWN)) {
-			playerController.move(Direction.Down);
-		}if (input.isKeyDown(Input.KEY_LEFT)) {
-			playerController.move(Direction.Left);
-		}if (input.isKeyDown(Input.KEY_RIGHT)) {
-			playerController.move(Direction.Right);
-		}if(input.isKeyDown(Input.KEY_SPACE)){
-			map.getDoor().open();
-		}
-		
-		playerController.update(delta);
-		cam.centerOn(playerController.getRealX() * Game.TILESIZE, playerController.getRealY() * Game.TILESIZE);
-	}
-
-	@Override
-	public int getID() {
-		return 1;
-	}
+	
 	public ElementPainter getElementPainter(){
 		return painter;
 	}

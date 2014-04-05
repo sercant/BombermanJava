@@ -4,5 +4,5 @@ import game.models.Direction;
 
 public interface IPlayerController {
 	public void update(int delta);
-	public void move(Direction dir);
+	public void movePlayer(Direction dir);
 }

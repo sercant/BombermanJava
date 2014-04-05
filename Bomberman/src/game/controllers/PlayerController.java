@@ -84,7 +84,7 @@ public class PlayerController implements IPlayerController {
 	}
 
 	@Override
-	public void move(Direction dir) {
+	public void movePlayer(Direction dir) {
 		// TODO Auto-generated method stub
 		int x = player.getX(), y = player.getY();
 		Map map = ((Play) game.getCurrentState()).getMap();
