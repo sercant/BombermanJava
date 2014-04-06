@@ -1,5 +1,7 @@
 package game.gui.states;
 
+import game.controllers.DoorController;
+import game.controllers.MapController;
 import game.controllers.PlayerController;
 import game.gui.camera.Camera;
 import game.gui.painter.ElementPainter;
@@ -8,38 +10,49 @@ import game.models.Direction;
 import game.models.Door;
 import game.models.Map;
 import game.models.Player;
-import game.models.SolidWall;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 public class Play extends BasicGameState {
-	
-	private Map map;
+	private int ID;
+//	private Map map;
 	private ElementPainter painter;
 	private Camera cam;
 	private int tileCountY = 11;
 	private int tileCountX = 19;
 	private PlayerController playerController;
+	private DoorController doorController;
+	private MapController mapController;
 	
 	public Play(int state){
-		
+		this.ID = state;
 	}
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg)
 			throws SlickException {
-		map = new Map(tileCountX, tileCountY);
-		initMap(sbg);
-		cam = new Camera(gc, map.getWidth(), map.getHeight());
-		painter = new ElementPainter(map, cam, sbg, new Image("res/solidWall.png"), new Image("res/brickWall.png"), null, new Image("res/door.png"), null, new Image("res/playerwalk.png"), null);
-		playerController = new PlayerController(map.getPlayer(), sbg);
+//		map = new Map(tileCountX, tileCountY);
+		Player player = new Player(1, 1, Direction.Down);
+		playerController = new PlayerController(player, sbg);
+		
+		Door door = new Door(7, 3);
+		doorController = new DoorController(door, sbg);
+		
+		mapController = new MapController(new Map(tileCountX, tileCountY), sbg);
+		mapController.init();
+		mapController.addMapElement(player);
+		mapController.addMapElement(door);
+		
+		cam = new Camera(gc, mapController.getMap().getWidth(), mapController.getMap().getHeight());
+		
+		painter = new ElementPainter(sbg, cam, new Image("res/solidWall.png"), new Image("res/brickWall.png"), null, new Image("res/door.png"), null, new Image("res/playerwalk.png"), null);
+		
 	}
 
 	@Override
@@ -53,45 +66,14 @@ public class Play extends BasicGameState {
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta)
 			throws SlickException {
-		Input input = gc.getInput();
-		
-		if(input.isKeyDown(Input.KEY_UP)){
-			playerController.movePlayer(Direction.Up);
-		}if (input.isKeyDown(Input.KEY_DOWN)) {
-			playerController.movePlayer(Direction.Down);
-		}if (input.isKeyDown(Input.KEY_LEFT)) {
-			playerController.movePlayer(Direction.Left);
-		}if (input.isKeyDown(Input.KEY_RIGHT)) {
-			playerController.movePlayer(Direction.Right);
-		}if(input.isKeyDown(Input.KEY_SPACE)){
-			map.getDoor().open();
-		}
-		
 		playerController.update(delta);
+		doorController.update(delta);
 		cam.centerOn(playerController.getRealX() * Game.TILESIZE, playerController.getRealY() * Game.TILESIZE);
 	}
 
 	@Override
 	public int getID() {
-		return 1;
-	}
-	
-	private void initMap(StateBasedGame sbg) {
-		// TODO Auto-generated method stub
-		
-		for (int i = 0; i < tileCountY; i++)
-		{
-			for (int j = 0; j < tileCountX; j++)
-			{
-				if(		i == 0 || i == tileCountY-1 
-					||	j == 0 || j == tileCountX - 1 
-					||	(i % 2 == 0 && j % 2 == 0))
-					map.addSolidWall(new SolidWall(j, i));
-			}
-		}
-		
-		map.setPlayer(new Player(1, 1, Direction.Down));
-		map.setDoor(new Door(7, 1));
+		return ID;
 	}
 	
 	public ElementPainter getElementPainter(){
@@ -101,6 +83,11 @@ public class Play extends BasicGameState {
 		return playerController;
 	}
 	public Map getMap(){
-		return map;
+		return mapController.getMap();
+	}
+
+	public int getLevelCode() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

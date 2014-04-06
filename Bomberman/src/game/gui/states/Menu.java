@@ -68,7 +68,7 @@ public class Menu extends BasicGameState {
 			menuButtons[selectedButton] = ">" + menuButtons[selectedButton] + "<";
 		}
 		if (input.isKeyPressed(Input.KEY_ENTER)) {
-			if(selectedButton == menuButtons.length) System.exit(0);
+			if(selectedButton == 3) System.exit(0);
 			sbg.enterState(selectedButton + 1);
 		}
 	}

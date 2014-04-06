@@ -1,7 +1,7 @@
 package game.models;
 
+import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.ListIterator;
 
 public class Cell {
 	private LinkedList<MapElement> mapElements;
@@ -24,8 +24,8 @@ public class Cell {
 	
 	public boolean isContains(ElementType type){
 		boolean result = false;
-		@SuppressWarnings("rawtypes")
-		ListIterator iterator = mapElements.listIterator();
+		
+		Iterator<MapElement> iterator = mapElements.descendingIterator();
 		
 		while(iterator.hasNext()){
 			MapElement e = (MapElement) iterator.next();
@@ -39,8 +39,8 @@ public class Cell {
 	}
 
 	public MapElement getElement(ElementType type){
-		@SuppressWarnings("rawtypes")
-		ListIterator iterator = mapElements.listIterator();
+		
+		Iterator<MapElement> iterator = mapElements.descendingIterator();
 		
 		while(iterator.hasNext()){
 			MapElement e = (MapElement) iterator.next();
@@ -51,8 +51,15 @@ public class Cell {
 		}
 		return null;
 	}
+	/**
+	 * Returns LIFO iterator
+	 * @return LIFO iterator
+	 */
+	public Iterator<MapElement> getIterator(){
+		return mapElements.listIterator();
+	}
 	
-	private LinkedList<MapElement> getMapElements() {
+	public LinkedList<MapElement> getMapElements() {
 		// TODO Auto-generated method stub
 		return mapElements;
 	}

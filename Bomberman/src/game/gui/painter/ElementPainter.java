@@ -1,17 +1,16 @@
 package game.gui.painter;
 
-import game.controllers.PlayerController;
 import game.gui.camera.Camera;
 import game.gui.states.Play;
 import game.gui.test.Game;
 import game.models.Direction;
-import game.models.Door;
+import game.models.ElementType;
 import game.models.Map;
 import game.models.MapElement;
-import game.models.SolidWall;
+import game.models.Player;
 
+import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.ListIterator;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
@@ -41,13 +40,13 @@ public class ElementPainter {
 	private GradientFill topRectFill;
 	
 	private Camera cam;
-	private Map map;
-	private StateBasedGame sbg;
+//	private Map map;
+	private StateBasedGame game;
 	private Graphics g;
 	private float topShift;
 	private float sideShift;
 	
-	public ElementPainter(Map map, Camera cam, StateBasedGame sbg, Image solidWallIMG, Image brickWallIMG, Image bombIMG, Image doorIMG, Image explosionIMG, Image playerIMG, Image powerUpIMG){
+	public ElementPainter(StateBasedGame game, Camera cam, Image solidWallIMG, Image brickWallIMG, Image bombIMG, Image doorIMG, Image explosionIMG, Image playerIMG, Image powerUpIMG){
 		this.solidWallIMG = filterAndScale(solidWallIMG);
 		this.brickWallIMG = filterAndScale(brickWallIMG);
 		this.bombIMG = filterAndScale(bombIMG);
@@ -63,13 +62,13 @@ public class ElementPainter {
 		
 		this.powerUpIMG = filterAndScale(powerUpIMG);
 		this.cam = cam;
-		this.map = map;
+//		this.map = map;
+		this.game = game;
 		
 		topRect = new Rectangle(0, 0, 1024, Game.TILESIZE);
 		topRectFill = new GradientFill(0, 0, Color.gray, topRect.getMaxX(), topRect.getMaxY(), Color.gray);
 		topSpacing = Game.TILESIZE;
 		
-		this.sbg = sbg;
 		//sprite init
 	}
 	
@@ -83,49 +82,101 @@ public class ElementPainter {
 	
 	public void draw(Graphics g) {
 		this.g = g;
+		Map map = ((Play) game.getCurrentState()).getMap();
 		topShift = topSpacing - cam.getCameraY();
 		sideShift = -cam.getCameraX();
+		LinkedList<MapElement> temp = new LinkedList<MapElement>();
 		
-		g.setColor(Color.white);
 		
-		LinkedList<SolidWall> solidWalls = map.getSolidWalls();
+		for(int y = 0; y < map.getTileCountY(); y++){
+			for(int x = 0; x < map.getTileCountX(); x++){
+				Iterator<MapElement> iterator = map.getCellIteratorAt(x, y);
+				if(iterator != null){
+					while(iterator.hasNext()){
+						MapElement e = (MapElement) iterator.next();
+						if(e.getType() == ElementType.Player){
+							drawTopMenu(g, e);
+							temp.add(e);
+						}else
+							drawElement(e);
+						}
+					}
+				}
+		}
 		
-		@SuppressWarnings("rawtypes")
-		ListIterator iterator = solidWalls.listIterator();
-		
+		Iterator<MapElement> iterator = temp.listIterator();
 		while(iterator.hasNext()){
-			SolidWall solidWall = (SolidWall) iterator.next();
-			
-			if(solidWall != null){
-				drawElement(solidWallIMG, solidWall);
-			}
+			MapElement e = (MapElement) iterator.next();
+			drawElement(e);
 		}
+
 		
-		Door door = map.getDoor();
-		
-		if(door != null){
-			drawElement(doorIMG, door);
-		}
-		
-		PlayerController player = ((Play) sbg.getCurrentState()).getPlayerController();
-		
-		if(player != null){
-			g.setColor(Color.black);
-			playerAnim.draw(player.getRealX() * Game.TILESIZE + sideShift, player.getRealY() * Game.TILESIZE + topShift);
-			g.setColor(Color.white);
-		}
+//		this.g = g;
+//		topShift = topSpacing - cam.getCameraY();
+//		sideShift = -cam.getCameraX();
+//		
+//		g.setColor(Color.white);
+//		
+//		LinkedList<SolidWall> solidWalls = map.getSolidWalls();
+//		
+//		@SuppressWarnings("rawtypes")
+//		ListIterator iterator = solidWalls.listIterator();
+//		
+//		while(iterator.hasNext()){
+//			SolidWall solidWall = (SolidWall) iterator.next();
+//			
+//			if(solidWall != null){
+//				drawElement(solidWallIMG, solidWall);
+//			}
+//		}
+//		
+//		Door door = map.getDoor();
+//		
+//		if(door != null){
+//			drawElement(doorIMG, door);
+//		}
+//		
+//		PlayerController player = ((Play) sbg.getCurrentState()).getPlayerController();
+//		
+//		if(player != null){
+//			g.setColor(Color.black);
+//			playerAnim.draw(player.getRealX() * Game.TILESIZE + sideShift, player.getRealY() * Game.TILESIZE + topShift);
+//			g.setColor(Color.white);
+//		}
 		
 		//Top info
-		g.fill(topRect, topRectFill);//fix 800 later to game width
-		g.drawString("LIVES: " + map.getPlayer().getLives(), 20, topRect.getHeight() / 2);
-		g.drawString("SCORE: " + map.getPlayer().getScore(), 200, topRect.getHeight() / 2);
 	}
-	
-	private void drawElement(Image i, MapElement e){
+	private void drawTopMenu(Graphics g2, MapElement e) {
+		
+		g.fill(topRect, topRectFill);//fix 800 later to game width
+		g.drawString("LIVES: " + ((Player) e).getLives(), 20, topRect.getHeight() / 2);
+		g.drawString("SCORE: " + ((Player) e).getScore(), 200, topRect.getHeight() / 2);
+	}
+
+	private void drawElement(MapElement e) {
+		// TODO Auto-generated method stub
 		g.setColor(Color.black);
-		i.draw(e.getX() * Game.TILESIZE + sideShift, e.getY() * Game.TILESIZE + topShift);
+		switch (e.getType()) {
+		case SolidWall:
+			solidWallIMG.draw(e.getRealX() * Game.TILESIZE + sideShift, e.getRealY() * Game.TILESIZE + topShift);
+			break;
+		case Door:
+			doorIMG.draw(e.getRealX() * Game.TILESIZE + sideShift, e.getRealY() * Game.TILESIZE + topShift);
+			break;
+		case Player:
+			playerAnim.draw(e.getRealX() * Game.TILESIZE + sideShift, e.getRealY() * Game.TILESIZE + topShift);
+			break;
+		default:
+			break;
+		}
 		g.setColor(Color.white);
 	}
+	
+//	private void drawElement(Image i, MapElement e){
+//		g.setColor(Color.black);
+//		i.draw(e.getX() * Game.TILESIZE + sideShift, e.getY() * Game.TILESIZE + topShift);
+//		g.setColor(Color.white);
+//	}
 	
 	public void startPlayerAnim(Direction dir){
 		switch (dir) {
@@ -202,13 +253,5 @@ public class ElementPainter {
 
 	public void setPowerUpIMG(Image powerUpIMG) {
 		this.powerUpIMG = powerUpIMG;
-	}
-
-	public Map getMap() {
-		return map;
-	}
-
-	public void setMap(Map map) {
-		this.map = map;
 	}
 }
