@@ -23,9 +23,12 @@ public class Map {
 		}
 	}
 	
-	public void addMapElement(MapElement e){
-		if(e != null)
-			cells[e.getY()][e.getX()].addElement(e);
+	public void addMapElement(MapElement e) throws ArrayIndexOutOfBoundsException{
+		if(e.getX() >= tileCountX || e.getY() >= tileCountY)
+			throw new ArrayIndexOutOfBoundsException("MapElement " + e + " is out of bounds of Map.");
+		else
+			if(e != null)
+				cells[e.getY()][e.getX()].addElement(e);
 	}
 
 	public int getWidth(){

@@ -8,7 +8,6 @@ import game.models.Cell;
 import game.models.Direction;
 import game.models.Door;
 import game.models.ElementType;
-import game.models.Map;
 import game.models.Player;
 
 import org.newdawn.slick.Input;
@@ -42,7 +41,7 @@ public class PlayerController implements IPlayerController {
 		// TODO Auto-generated method stub
 		int playerX = player.getX();
 		int playerY = player.getY();
-		Map map = ((Play) game.getCurrentState()).getMap();
+		MapController mapController = ((Play) game.getCurrentState()).getMapController();
 		
 		Input input = game.getContainer().getInput();
 		
@@ -80,14 +79,14 @@ public class PlayerController implements IPlayerController {
 				smoothShift = 0;
 				player.setRealX(realX = playerX);
 				player.setRealY(realY = playerY);
-				map.getCellAt(prevX, prevY).deleteElement(player);
-				map.getCellAt(player.getX(), player.getY()).addElement(player);
+				mapController.getCellAt(prevX, prevY).deleteElement(player);
+				mapController.getCellAt(player.getX(), player.getY()).addElement(player);
 				prevX = player.getX();
 				prevY = player.getY();
 			}
 		}
-		Cell cell = map.getCellAt((int)realX, (int)realY);
-		if(cell.isContains(ElementType.Door) && ((Door) cell.getElement(ElementType.Door)).isOpen()){
+		Cell cell = mapController.getCellAt(player.getX(), player.getY());
+		if(cell.isContains(ElementType.Player) && cell.isContains(ElementType.Door) && ((Door) cell.getElement(ElementType.Door)).isOpen()){
 			try {
 				game.initStatesList(game.getContainer());
 				((GameOver) game.getState(Game.gameOver)).setScore(player.getScore());
@@ -113,27 +112,27 @@ public class PlayerController implements IPlayerController {
 	public void movePlayer(Direction dir) {
 		// TODO Auto-generated method stub
 		int x = player.getX(), y = player.getY();
-		Map map = ((Play) game.getCurrentState()).getMap();
+		MapController mapController = ((Play) game.getCurrentState()).getMapController();
 		
-		if(!player.isMoving() && dir == Direction.Up && !map.getCellAt(x, y-1).isContains(ElementType.SolidWall)){
+		if(!player.isMoving() && dir == Direction.Up && !mapController.getCellAt(x, y-1).isContains(ElementType.SolidWall)){
 			player.setMoving(true);
 			player.setCurrentDir(Direction.Up);
 			player.setY(y-1);
 //			map.getCellAt(x, y).deleteElement(player);
 //			map.getCellAt(x, y-1).addElement(player);	//Replace this two part
-		}else if(!player.isMoving() && dir == Direction.Down && !map.getCellAt(x, y+1).isContains(ElementType.SolidWall)){
+		}else if(!player.isMoving() && dir == Direction.Down && !mapController.getCellAt(x, y+1).isContains(ElementType.SolidWall)){
 			player.setMoving(true);
 			player.setCurrentDir(Direction.Down);
 			player.setY(y+1);
 //			map.getCellAt(x, y).deleteElement(player);
 //			map.getCellAt(x, y+1).addElement(player);
-		}else if(!player.isMoving() && dir == Direction.Left && !map.getCellAt(x-1, y).isContains(ElementType.SolidWall)){
+		}else if(!player.isMoving() && dir == Direction.Left && !mapController.getCellAt(x-1, y).isContains(ElementType.SolidWall)){
 			player.setMoving(true);
 			player.setCurrentDir(Direction.Left);
 			player.setX(x-1);
 //			map.getCellAt(x, y).deleteElement(player);
 //			map.getCellAt(x-1, y).addElement(player);
-		}else if(!player.isMoving() && dir == Direction.Right && !map.getCellAt(x+1, y).isContains(ElementType.SolidWall)){
+		}else if(!player.isMoving() && dir == Direction.Right && !mapController.getCellAt(x+1, y).isContains(ElementType.SolidWall)){
 			player.setMoving(true);
 			player.setCurrentDir(Direction.Right);
 			player.setX(x+1);

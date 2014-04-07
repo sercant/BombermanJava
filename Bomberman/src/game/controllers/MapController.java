@@ -1,6 +1,9 @@
 package game.controllers;
 
+import java.util.Iterator;
+
 import game.controllers.interfaces.GeneralController;
+import game.models.Cell;
 import game.models.Map;
 import game.models.MapElement;
 import game.models.SolidWall;
@@ -23,16 +26,20 @@ public class MapController implements GeneralController{
 		
 	}
 
-	public Map getMap() {
-		return map;
-	}
+//	public Map getMap() {
+//		return map;
+//	}
 
 	public void setMap(Map map) {
 		this.map = map;
 	}
 
-	public void addMapElement(MapElement e) {
-		map.addMapElement(e);
+	public void addMapElement(MapElement e) throws ArrayIndexOutOfBoundsException{
+		try{
+			map.addMapElement(e);
+		}catch(ArrayIndexOutOfBoundsException ex){
+			throw ex;
+		}
 	}
 
 	public void init() {
@@ -46,5 +53,33 @@ public class MapController implements GeneralController{
 					map.addMapElement(new SolidWall(j, i));
 			}
 		}
+	}
+
+	public int getMapHeight() {
+		return map.getHeight();
+	}
+
+	public int getMapWidth() {
+		return map.getWidth();
+	}
+
+	public int getTileCountY() {
+		// TODO Auto-generated method stub
+		return map.getTileCountY();
+	}
+
+	public int getTileCountX() {
+		// TODO Auto-generated method stub
+		return map.getTileCountX();
+	}
+
+	public Iterator<MapElement> getCellIteratorAt(int x, int y) {
+		// TODO Auto-generated method stub
+		return map.getCellIteratorAt(x, y);
+	}
+
+	public Cell getCellAt(int x, int y) {
+		// TODO Auto-generated method stub
+		return map.getCellAt(x, y);
 	}
 }

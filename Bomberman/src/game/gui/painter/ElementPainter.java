@@ -1,11 +1,11 @@
 package game.gui.painter;
 
+import game.controllers.MapController;
 import game.gui.camera.Camera;
 import game.gui.states.Play;
 import game.gui.test.Game;
 import game.models.Direction;
 import game.models.ElementType;
-import game.models.Map;
 import game.models.MapElement;
 import game.models.Player;
 
@@ -82,15 +82,15 @@ public class ElementPainter {
 	
 	public void draw(Graphics g) {
 		this.g = g;
-		Map map = ((Play) game.getCurrentState()).getMap();
+		MapController mapController = ((Play) game.getCurrentState()).getMapController();
 		topShift = topSpacing - cam.getCameraY();
 		sideShift = -cam.getCameraX();
 		LinkedList<MapElement> temp = new LinkedList<MapElement>();
 		
 		
-		for(int y = 0; y < map.getTileCountY(); y++){
-			for(int x = 0; x < map.getTileCountX(); x++){
-				Iterator<MapElement> iterator = map.getCellIteratorAt(x, y);
+		for(int y = 0; y < mapController.getTileCountY(); y++){
+			for(int x = 0; x < mapController.getTileCountX(); x++){
+				Iterator<MapElement> iterator = mapController.getCellIteratorAt(x, y);
 				if(iterator != null){
 					while(iterator.hasNext()){
 						MapElement e = (MapElement) iterator.next();

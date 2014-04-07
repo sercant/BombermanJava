@@ -41,15 +41,19 @@ public class Play extends BasicGameState {
 		Player player = new Player(1, 1, Direction.Down);
 		playerController = new PlayerController(player, sbg);
 		
-		Door door = new Door(7, 3);
+		Door door = new Door(3, 3);
 		doorController = new DoorController(door, sbg);
 		
 		mapController = new MapController(new Map(tileCountX, tileCountY), sbg);
 		mapController.init();
-		mapController.addMapElement(player);
-		mapController.addMapElement(door);
+		try{
+			mapController.addMapElement(player);
+			mapController.addMapElement(door);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 		
-		cam = new Camera(gc, mapController.getMap().getWidth(), mapController.getMap().getHeight());
+		cam = new Camera(gc, mapController.getMapWidth(), mapController.getMapHeight());
 		
 		painter = new ElementPainter(sbg, cam, new Image("res/solidWall.png"), new Image("res/brickWall.png"), null, new Image("res/door.png"), null, new Image("res/playerwalk.png"), null);
 		
@@ -82,8 +86,8 @@ public class Play extends BasicGameState {
 	public PlayerController getPlayerController(){
 		return playerController;
 	}
-	public Map getMap(){
-		return mapController.getMap();
+	public MapController getMapController(){
+		return mapController;
 	}
 
 	public int getLevelCode() {
