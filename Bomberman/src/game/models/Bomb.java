@@ -8,7 +8,7 @@ public class Bomb extends IndestructibleElement{
 	private boolean exploded;
 
 	public Bomb(int x, int y, int explosionRange, int detonationTime) {
-		super(x, y, ElementType.Door);
+		super(x, y, ElementType.Bomb);
 		this.detonationTime = detonationTime;
 		this.explosionRange = explosionRange;
 		this.delta = 0;
