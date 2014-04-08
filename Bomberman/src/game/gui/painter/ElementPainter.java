@@ -2,8 +2,8 @@ package game.gui.painter;
 
 import game.controllers.MapController;
 import game.gui.camera.Camera;
+import game.gui.main.Game;
 import game.gui.states.Play;
-import game.gui.test.Game;
 import game.models.Direction;
 import game.models.ElementType;
 import game.models.MapElement;

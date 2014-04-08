@@ -2,7 +2,7 @@ package game.gui.camera.tests;
 
 import static org.junit.Assert.fail;
 import game.gui.camera.Camera;
-import game.gui.test.Game;
+import game.gui.main.Game;
 
 import org.junit.Before;
 import org.junit.BeforeClass;

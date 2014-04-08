@@ -2,7 +2,7 @@ package game.models;
 
 import java.util.Iterator;
 
-import game.gui.test.Game;
+import game.gui.main.Game;
 
 
 public class Map {

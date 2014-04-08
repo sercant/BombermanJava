@@ -1,6 +1,6 @@
 package game.gui.states;
 
-import game.gui.test.Game;
+import game.gui.main.Game;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;

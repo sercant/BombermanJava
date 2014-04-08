@@ -1,4 +1,4 @@
-package game.gui.test;
+package game.gui.main;
 
 import game.gui.states.EnterCode;
 import game.gui.states.GameOver;

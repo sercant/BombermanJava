@@ -9,8 +9,10 @@ public class PowerUpElement extends MapElement{
 	
 	public PowerUpElement(int x, int y, PowerUpType type) {
 		super(x, y, ElementType.PowerUp);
-		
-		this.powerType = type;
+		if(type != null)
+			this.powerType = type;
+		else
+			this.powerType = PowerUpType.BombCount;
 		available = false;
 		taken = false;
 	}

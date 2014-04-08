@@ -1,9 +1,9 @@
 package game.controllers;
 
 import game.controllers.interfaces.IPlayerController;
+import game.gui.main.Game;
 import game.gui.states.GameOver;
 import game.gui.states.Play;
-import game.gui.test.Game;
 import game.models.Cell;
 import game.models.Direction;
 import game.models.Door;

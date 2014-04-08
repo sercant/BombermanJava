@@ -172,8 +172,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="20" language="java" name="game.gui.test.Game" project="Bomberman" 
-    file="/Bomberman/src/game/gui/test/Game.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="20" language="java" name="game.gui.main.Game" project="Bomberman" 
+    file="/Bomberman/src/game/gui/main/Game.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1554" y="943"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
@@ -278,37 +278,29 @@
     <end type="TARGET" refId="11"/>  
   </generalization>  
   <association id="54">    
-    <end type="SOURCE" refId="9" navigable="false">      
-      <attribute id="55" name="cam"/>      
-      <multiplicity id="56" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="5" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="57">    
     <end type="SOURCE" refId="16" navigable="false">      
-      <attribute id="58" name="type"/>      
-      <multiplicity id="59" minimum="0" maximum="1"/>    
+      <attribute id="55" name="type"/>      
+      <multiplicity id="56" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="14" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <realization id="60">    
+  <realization id="57">    
     <end type="SOURCE" refId="1"/>    
     <end type="TARGET" refId="4"/>  
   </realization>  
-  <association id="61">    
+  <association id="58">    
     <end type="SOURCE" refId="17" navigable="false">      
-      <attribute id="62" name="currentDir"/>      
-      <multiplicity id="63" minimum="0" maximum="1"/>    
+      <attribute id="59" name="currentDir"/>      
+      <multiplicity id="60" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="12" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="64">    
+  <association id="61">    
     <end type="SOURCE" refId="9" navigable="false">      
-      <attribute id="65" name="playerController"/>      
-      <multiplicity id="66" minimum="0" maximum="1"/>    
+      <attribute id="62" name="playerController"/>      
+      <multiplicity id="63" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="1" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
