@@ -1,5 +1,6 @@
 package game.gui.states;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -38,6 +39,7 @@ public class Menu extends BasicGameState {
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
 			throws SlickException {
+		g.setBackground(Color.black);
 		g.drawImage(logo, gc.getWidth() / 2 - logo.getWidth() /2, 50);
 		
 		for (int i = 0, j = 200; i < menuButtons.length; i++, j += 50) {
@@ -55,16 +57,20 @@ public class Menu extends BasicGameState {
 			menuButtons[selectedButton] = menuButtons[selectedButton].replace(">", "");
 			menuButtons[selectedButton] = menuButtons[selectedButton].replace("<", "");
 			selectedButton++;
+			
 			if(selectedButton > 3){ selectedButton = 0; }
 			else if(selectedButton < 0) { selectedButton = 3; }
+			
 			menuButtons[selectedButton] = ">" + menuButtons[selectedButton] + "<";
 		}
 		if(input.isKeyPressed(Input.KEY_UP)){
 			menuButtons[selectedButton] = menuButtons[selectedButton].replace(">", "");
 			menuButtons[selectedButton] = menuButtons[selectedButton].replace("<", "");
 			selectedButton--;
+			
 			if(selectedButton > 3){ selectedButton = 0; }
 			else if(selectedButton < 0) { selectedButton = 3; }
+			
 			menuButtons[selectedButton] = ">" + menuButtons[selectedButton] + "<";
 		}
 		if (input.isKeyPressed(Input.KEY_ENTER)) {

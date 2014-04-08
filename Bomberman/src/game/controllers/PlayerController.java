@@ -20,25 +20,17 @@ public class PlayerController implements IPlayerController {
 	private Player player;
 	private float moveTimer;
 	private float smoothShift;
-	private int prevX;
-	private int prevY;
-	private float realX;
-	private float realY;
+
 	
 	public PlayerController(Player player, StateBasedGame game) {
 		this.player = player;
 		resetMoveTimer();
 		this.game = game;
-		realX = player.getX();
-		realY = player.getY();
-		prevX = player.getX();
-		prevY = player.getY();
 		smoothShift = 0;
 	}
 
 	@Override
 	public void update(int delta) {
-		// TODO Auto-generated method stub
 		int playerX = player.getX();
 		int playerY = player.getY();
 		MapController mapController = ((Play) game.getCurrentState()).getMapController();
@@ -63,6 +55,8 @@ public class PlayerController implements IPlayerController {
 		if(player.isMoving()){
 			moveTimer -= delta;
 			smoothShift = (float) delta / getMoveTime();
+			float realX = player.getRealX();
+			float realY = player.getRealY();
 			
 			if(realX > playerX)
 				player.setRealX(realX -= smoothShift);
@@ -79,10 +73,10 @@ public class PlayerController implements IPlayerController {
 				smoothShift = 0;
 				player.setRealX(realX = playerX);
 				player.setRealY(realY = playerY);
-				mapController.getCellAt(prevX, prevY).deleteElement(player);
+				mapController.getCellAt(player.getPrevX(), player.getPrevY()).deleteElement(player);
 				mapController.getCellAt(player.getX(), player.getY()).addElement(player);
-				prevX = player.getX();
-				prevY = player.getY();
+				player.setPrevX(player.getX());
+				player.setPrevY(player.getY());
 			}
 		}
 		Cell cell = mapController.getCellAt(player.getX(), player.getY());
@@ -93,14 +87,12 @@ public class PlayerController implements IPlayerController {
 				((GameOver) game.getState(Game.gameOver)).setLevelCode(((Play)game.getCurrentState()).getLevelCode());
 				game.enterState(Game.gameOver);
 			} catch (SlickException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 	}
 
 	private void resetMoveTimer() {
-		// TODO Auto-generated method stub
 		moveTimer = getMoveTime();
 	}
 	
@@ -110,7 +102,6 @@ public class PlayerController implements IPlayerController {
 
 	@Override
 	public void movePlayer(Direction dir) {
-		// TODO Auto-generated method stub
 		int x = player.getX(), y = player.getY();
 		MapController mapController = ((Play) game.getCurrentState()).getMapController();
 		
@@ -118,35 +109,27 @@ public class PlayerController implements IPlayerController {
 			player.setMoving(true);
 			player.setCurrentDir(Direction.Up);
 			player.setY(y-1);
-//			map.getCellAt(x, y).deleteElement(player);
-//			map.getCellAt(x, y-1).addElement(player);	//Replace this two part
 		}else if(!player.isMoving() && dir == Direction.Down && !mapController.getCellAt(x, y+1).isContains(ElementType.SolidWall)){
 			player.setMoving(true);
 			player.setCurrentDir(Direction.Down);
 			player.setY(y+1);
-//			map.getCellAt(x, y).deleteElement(player);
-//			map.getCellAt(x, y+1).addElement(player);
 		}else if(!player.isMoving() && dir == Direction.Left && !mapController.getCellAt(x-1, y).isContains(ElementType.SolidWall)){
 			player.setMoving(true);
 			player.setCurrentDir(Direction.Left);
 			player.setX(x-1);
-//			map.getCellAt(x, y).deleteElement(player);
-//			map.getCellAt(x-1, y).addElement(player);
 		}else if(!player.isMoving() && dir == Direction.Right && !mapController.getCellAt(x+1, y).isContains(ElementType.SolidWall)){
 			player.setMoving(true);
 			player.setCurrentDir(Direction.Right);
 			player.setX(x+1);
-//			map.getCellAt(x, y).deleteElement(player);
-//			map.getCellAt(x+1, y).addElement(player);
 		}
 	}
 
 	public float getRealX() {
-		return realX;
+		return player.getRealX();
 	}
 
 	public float getRealY() {
-		return realY;
+		return player.getRealY();
 	}
 	
 }

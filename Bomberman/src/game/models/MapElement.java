@@ -1,7 +1,7 @@
 package game.models;
 
 
-public class MapElement {
+public abstract class MapElement {
 	private ElementType type;
 	private int x;
 	private int y;

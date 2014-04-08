@@ -18,7 +18,7 @@ public class DoorController implements GeneralController{
 	public void update(int delta){
 		Input input = game.getContainer().getInput();
 		
-		if(input.isKeyPressed(Input.KEY_SPACE)){
+		if(input.isKeyPressed(Input.KEY_SPACE)){//TEMPORARY
 			door.open();
 		}
 	}

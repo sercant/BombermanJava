@@ -1,7 +1,7 @@
 package game.models;
 
 
-public class Player extends MapElement{
+public class Player extends DynamicMapElement{
 
 	//life count
 	private int lives;
@@ -57,7 +57,7 @@ public class Player extends MapElement{
 		this.score += score;
 	}
 	
-	public void powerUp(PowerUp power){
+	public void powerUp(PowerUpType power){
 		switch (power) {
 		case Speed:
 			moveSpeed = moveSpeed < 5.f ? moveSpeed + .1f : moveSpeed;

@@ -1,6 +1,6 @@
 package game.models;
 
-public enum PowerUp {
+public enum PowerUpType {
 	Speed, 
 	BombCount,
 	ExplosionRange

@@ -2,6 +2,7 @@ package game.gui.states;
 
 import game.gui.test.Game;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -29,6 +30,7 @@ public class GameOver extends BasicGameState {
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
 			throws SlickException {
 		// TODO Auto-generated method stub
+		g.setBackground(Color.black);
 		g.drawString("Score: " + score + "!", gc.getWidth() / 2, gc.getHeight() / 2);
 		g.drawString("Level Code: " + levelCode + "", gc.getWidth() / 2, gc.getHeight() / 2 + 20);
 		g.drawString("Press ESC to return Main Menu.", gc.getWidth() / 2, gc.getHeight() / 2 + 60);

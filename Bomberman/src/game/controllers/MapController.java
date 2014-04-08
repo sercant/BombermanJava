@@ -26,10 +26,6 @@ public class MapController implements GeneralController{
 		
 	}
 
-//	public Map getMap() {
-//		return map;
-//	}
-
 	public void setMap(Map map) {
 		this.map = map;
 	}
@@ -82,4 +78,5 @@ public class MapController implements GeneralController{
 		// TODO Auto-generated method stub
 		return map.getCellAt(x, y);
 	}
+
 }

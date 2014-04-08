@@ -1,7 +1,7 @@
 package game.models;
 
 
-public class DestructibleElement extends MapElement{
+public abstract class DestructibleElement extends MapElement{
 	private boolean destroyed;
 
 	

@@ -3,11 +3,11 @@ package game.models;
 
 public class PowerUpElement extends MapElement{
 
-	private PowerUp powerType;
+	private PowerUpType powerType;
 	private boolean available;
 	private boolean taken;
 	
-	public PowerUpElement(int x, int y, PowerUp type) {
+	public PowerUpElement(int x, int y, PowerUpType type) {
 		super(x, y, ElementType.PowerUp);
 		
 		this.powerType = type;
@@ -31,7 +31,7 @@ public class PowerUpElement extends MapElement{
 		this.taken = taken;
 	}
 
-	public PowerUp getPowerType() {
+	public PowerUpType getPowerType() {
 		return powerType;
 	}
 	
