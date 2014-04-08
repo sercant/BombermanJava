@@ -1,5 +1,6 @@
 package game.gui.states;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -18,7 +19,9 @@ public class Menu extends BasicGameState {
 	public Menu(int state){
 		ID = state;
 	}
-
+	/**
+	 * Initializes the state.
+	 */
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg)
 			throws SlickException {
@@ -34,17 +37,22 @@ public class Menu extends BasicGameState {
 		
 		selectedButton = 0;
 	}
-
+	/**
+	 * Render part of the state. This is where the graphics printed on the screen.
+	 */
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
 			throws SlickException {
+		g.setBackground(Color.black);
 		g.drawImage(logo, gc.getWidth() / 2 - logo.getWidth() /2, 50);
 		
 		for (int i = 0, j = 200; i < menuButtons.length; i++, j += 50) {
 			g.drawString(menuButtons[i], gc.getWidth() / 2, j);
 		}
 	}
-
+	/**
+	 * Update part of the state. This is where all the changes made.
+	 */
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta)
 			throws SlickException {
@@ -55,20 +63,24 @@ public class Menu extends BasicGameState {
 			menuButtons[selectedButton] = menuButtons[selectedButton].replace(">", "");
 			menuButtons[selectedButton] = menuButtons[selectedButton].replace("<", "");
 			selectedButton++;
+			
 			if(selectedButton > 3){ selectedButton = 0; }
 			else if(selectedButton < 0) { selectedButton = 3; }
+			
 			menuButtons[selectedButton] = ">" + menuButtons[selectedButton] + "<";
 		}
 		if(input.isKeyPressed(Input.KEY_UP)){
 			menuButtons[selectedButton] = menuButtons[selectedButton].replace(">", "");
 			menuButtons[selectedButton] = menuButtons[selectedButton].replace("<", "");
 			selectedButton--;
+			
 			if(selectedButton > 3){ selectedButton = 0; }
 			else if(selectedButton < 0) { selectedButton = 3; }
+			
 			menuButtons[selectedButton] = ">" + menuButtons[selectedButton] + "<";
 		}
 		if (input.isKeyPressed(Input.KEY_ENTER)) {
-			if(selectedButton == menuButtons.length) System.exit(0);
+			if(selectedButton == 3) System.exit(0);
 			sbg.enterState(selectedButton + 1);
 		}
 	}

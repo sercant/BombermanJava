@@ -1,17 +1,16 @@
 package game.gui.painter;
 
-import game.controllers.PlayerController;
-import game.entities.Direction;
-import game.entities.Door;
-import game.entities.Map;
-import game.entities.MapElement;
-import game.entities.SolidWall;
+import game.controllers.MapController;
 import game.gui.camera.Camera;
+import game.gui.main.Game;
 import game.gui.states.Play;
-import game.gui.test.Game;
+import game.models.Direction;
+import game.models.ElementType;
+import game.models.MapElement;
+import game.models.Player;
 
+import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.ListIterator;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
@@ -41,14 +40,23 @@ public class ElementPainter {
 	private GradientFill topRectFill;
 	
 	private Camera cam;
-	private Map map;
-	private StateBasedGame sbg;
-	private int delta;
+	private StateBasedGame game;
 	private Graphics g;
 	private float topShift;
 	private float sideShift;
-	
-	public ElementPainter(Map map, Camera cam, StateBasedGame sbg, Image solidWallIMG, Image brickWallIMG, Image bombIMG, Image doorIMG, Image explosionIMG, Image playerIMG, Image powerUpIMG){
+	/**
+	 * Constructor method.
+	 * @param game Game instance that will be painted in to
+	 * @param cam Camera instace
+	 * @param solidWallIMG Image of the solid wall.
+	 * @param brickWallIMG Image of the brick wall.
+	 * @param bombIMG Image of the bomb.
+	 * @param doorIMG Image of the  door.
+	 * @param explosionIMG Image of the explosion.
+	 * @param playerIMG Image of the player.
+	 * @param powerUpIMG Image of the power up.
+	 */
+	public ElementPainter(StateBasedGame game, Camera cam, Image solidWallIMG, Image brickWallIMG, Image bombIMG, Image doorIMG, Image explosionIMG, Image playerIMG, Image powerUpIMG){
 		this.solidWallIMG = filterAndScale(solidWallIMG);
 		this.brickWallIMG = filterAndScale(brickWallIMG);
 		this.bombIMG = filterAndScale(bombIMG);
@@ -64,16 +72,19 @@ public class ElementPainter {
 		
 		this.powerUpIMG = filterAndScale(powerUpIMG);
 		this.cam = cam;
-		this.map = map;
+		this.game = game;
 		
 		topRect = new Rectangle(0, 0, 1024, Game.TILESIZE);
 		topRectFill = new GradientFill(0, 0, Color.gray, topRect.getMaxX(), topRect.getMaxY(), Color.gray);
 		topSpacing = Game.TILESIZE;
 		
-		this.sbg = sbg;
 		//sprite init
 	}
-	
+	/**
+	 * Filters to nearest corner and scales the image.
+	 * @param image Image to be scaled.
+	 * @return Scaled image 
+	 */
 	private Image filterAndScale(Image image){
 		if(image != null){
 			image.setFilter(Image.FILTER_NEAREST);
@@ -81,71 +92,116 @@ public class ElementPainter {
 		}else
 			return null;
 	}
-	
-	public void draw(int delta, Graphics g) {
-		this.delta = delta;
+	/**
+	 * Draws the elements to screen.
+	 * @param g Graphics instance which the images will be drawn.
+	 */
+	public void draw(Graphics g) {
 		this.g = g;
+		MapController mapController = ((Play) game.getCurrentState()).getMapController();
 		topShift = topSpacing - cam.getCameraY();
 		sideShift = -cam.getCameraX();
+		LinkedList<MapElement> temp = new LinkedList<MapElement>();
 		
-		g.setColor(Color.white);
 		
-		LinkedList<SolidWall> solidWalls = map.getSolidWalls();
+		for(int y = 0; y < mapController.getTileCountY(); y++){
+			for(int x = 0; x < mapController.getTileCountX(); x++){
+				Iterator<MapElement> iterator = mapController.getCellIteratorAt(x, y);
+				if(iterator != null){
+					while(iterator.hasNext()){
+						MapElement e = (MapElement) iterator.next();
+						if(e.getType() == ElementType.Player){
+							temp.add(e);
+						}else
+							drawElement(e);
+						}
+					}
+				}
+		}
 		
-		@SuppressWarnings("rawtypes")
-		ListIterator iterator = solidWalls.listIterator();
-		
+		Iterator<MapElement> iterator = temp.listIterator();
 		while(iterator.hasNext()){
-			SolidWall solidWall = (SolidWall) iterator.next();
-			
-			if(solidWall != null){
-				drawElement(solidWallIMG, solidWall);
+			MapElement e = (MapElement) iterator.next();
+			if(e.getType() == ElementType.Player){
+				drawTopMenu(e);
 			}
+			drawElement(e);
 		}
-		
-		Door door = map.getDoor();
-		
-		if(door != null){
-			drawElement(doorIMG, door);
-		}
-		
-		PlayerController player = ((Play) sbg.getCurrentState()).getPlayerController();
-		
-		if(player != null){
-			g.setColor(Color.black);
-			playerAnim.draw(player.getRealX() * Game.TILESIZE + sideShift, player.getRealY() * Game.TILESIZE + topShift);
-			g.setColor(Color.white);
-		}
-		
-		//Top info
-		g.fill(topRect, topRectFill);//fix 800 later to game width
-		g.drawString("LIVES: " + map.getPlayer().getLives(), 20, topRect.getHeight() / 2);
-		g.drawString("SCORE: " + map.getPlayer().getScore(), 200, topRect.getHeight() / 2);
 	}
-	
-	private void drawElement(Image i, MapElement e){
+	/**
+	 * Draws the top info panel
+	 * @param e Player element
+	 */
+	private void drawTopMenu(MapElement e) {
+		g.fill(topRect, topRectFill);//fix 800 later to game width
+		g.drawString("LIVES: " + ((Player) e).getLives(), 20, topRect.getHeight() / 2);
+		g.drawString("SCORE: " + ((Player) e).getScore(), 200, topRect.getHeight() / 2);
+	}
+	/**
+	 * Draws the given MapElement to graphics instance.
+	 * @param e MapElement to be drawn.
+	 */
+	private void drawElement(MapElement e) {
 		g.setColor(Color.black);
-		i.draw(e.getX() * Game.TILESIZE + sideShift, e.getY() * Game.TILESIZE + topShift);
+		switch (e.getType()) {
+		case SolidWall:
+			solidWallIMG.draw(e.getRealX() * Game.TILESIZE + sideShift, e.getRealY() * Game.TILESIZE + topShift);
+			break;
+		case Door:
+			doorIMG.draw(e.getRealX() * Game.TILESIZE + sideShift, e.getRealY() * Game.TILESIZE + topShift);
+			break;
+		case Player:
+			playerAnim.draw(e.getRealX() * Game.TILESIZE + sideShift, e.getRealY() * Game.TILESIZE + topShift);
+			break;
+		default:
+			break;
+		}
 		g.setColor(Color.white);
 	}
-	
+	/**
+	 * Starts playing the player walk animation.
+	 * @param dir Direction of the animation.
+	 */
 	public void startPlayerAnim(Direction dir){
 		switch (dir) {
 		case Down:
 			playerAnim.setAutoUpdate(true);
 			break;
-
+		case Up:
+			playerAnim.setAutoUpdate(true);
+			break;
+		case Left:
+			playerAnim.setAutoUpdate(true);
+			break;
+		case Right:
+			playerAnim.setAutoUpdate(true);
+			break;
 		default:
 			break;
 		}
 	}
+	/**
+	 * Stops the player walk animation.
+	 * @param dir Final direction of the animation.
+	 */
 	public void stopPlayerAnim(Direction dir) {
 		switch (dir) {
 		case Down:
 			playerAnim.setAutoUpdate(false);
 			playerAnim.setCurrentFrame(1);
 			break;
-
+		case Up:
+			playerAnim.setAutoUpdate(false);
+			playerAnim.setCurrentFrame(1);
+			break;
+		case Left:
+			playerAnim.setAutoUpdate(false);
+			playerAnim.setCurrentFrame(1);
+			break;
+		case Right:
+			playerAnim.setAutoUpdate(false);
+			playerAnim.setCurrentFrame(1);
+			break;
 		default:
 			break;
 		}
@@ -204,13 +260,5 @@ public class ElementPainter {
 
 	public void setPowerUpIMG(Image powerUpIMG) {
 		this.powerUpIMG = powerUpIMG;
-	}
-
-	public Map getMap() {
-		return map;
-	}
-
-	public void setMap(Map map) {
-		this.map = map;
 	}
 }

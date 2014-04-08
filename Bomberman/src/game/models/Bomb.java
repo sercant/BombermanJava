@@ -1,4 +1,4 @@
-package game.entities;
+package game.models;
 
 public class Bomb extends IndestructibleElement{
 	
@@ -8,7 +8,7 @@ public class Bomb extends IndestructibleElement{
 	private boolean exploded;
 
 	public Bomb(int x, int y, int explosionRange, int detonationTime) {
-		super(x, y);
+		super(x, y, ElementType.Door);
 		this.detonationTime = detonationTime;
 		this.explosionRange = explosionRange;
 		this.delta = 0;

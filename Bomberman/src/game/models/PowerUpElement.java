@@ -1,16 +1,18 @@
-package game.entities;
+package game.models;
 
 
 public class PowerUpElement extends MapElement{
 
-	private PowerUp type;
+	private PowerUpType powerType;
 	private boolean available;
 	private boolean taken;
 	
-	public PowerUpElement(int x, int y, PowerUp type) {
-		super(x, y);
-		
-		this.type = type;
+	public PowerUpElement(int x, int y, PowerUpType type) {
+		super(x, y, ElementType.PowerUp);
+		if(type != null)
+			this.powerType = type;
+		else
+			this.powerType = PowerUpType.BombCount;
 		available = false;
 		taken = false;
 	}
@@ -31,8 +33,8 @@ public class PowerUpElement extends MapElement{
 		this.taken = taken;
 	}
 
-	public PowerUp getType() {
-		return type;
+	public PowerUpType getPowerType() {
+		return powerType;
 	}
 	
 }

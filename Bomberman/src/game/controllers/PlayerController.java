@@ -1,44 +1,52 @@
 package game.controllers;
 
-import game.entities.Direction;
-import game.entities.Door;
-import game.entities.Map;
-import game.entities.Player;
-import game.entities.PowerUp;
-import game.entities.SolidWall;
+import game.controllers.interfaces.IPlayerController;
+import game.gui.main.Game;
+import game.gui.states.GameOver;
 import game.gui.states.Play;
-import game.gui.test.Game;
-import game.interfaces.IPlayerController;
+import game.models.Cell;
+import game.models.Direction;
+import game.models.Door;
+import game.models.ElementType;
+import game.models.Player;
 
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 public class PlayerController implements IPlayerController {
 
-	private Map map;
 	private StateBasedGame game;
 	private Player player;
 	private float moveTimer;
 	private float smoothShift;
-	private float realX;
-	private float realY;
+
 	
 	public PlayerController(Player player, StateBasedGame game) {
 		this.player = player;
 		resetMoveTimer();
 		this.game = game;
-		realX = player.getX();
-		realY = player.getY();
 		smoothShift = 0;
 	}
 
 	@Override
-	public void update(Map map, int delta) {
-		// TODO Auto-generated method stub
+	public void update(int delta) {
 		int playerX = player.getX();
 		int playerY = player.getY();
-		this.map = map;
-		int[][] colMap = map.getColMap();
+		MapController mapController = ((Play) game.getCurrentState()).getMapController();
+		
+		Input input = game.getContainer().getInput();
+		
+		if(input.isKeyDown(Input.KEY_UP)){
+			movePlayer(Direction.Up);
+		}if (input.isKeyDown(Input.KEY_DOWN)) {
+			movePlayer(Direction.Down);
+		}if (input.isKeyDown(Input.KEY_LEFT)) {
+			movePlayer(Direction.Left);
+		}if (input.isKeyDown(Input.KEY_RIGHT)) {
+			movePlayer(Direction.Right);
+		}
+		
 		if(player.isMoving()){
 			((Play) game.getCurrentState()).getElementPainter().startPlayerAnim(player.getCurrentDir());
 		}else
@@ -47,38 +55,44 @@ public class PlayerController implements IPlayerController {
 		if(player.isMoving()){
 			moveTimer -= delta;
 			smoothShift = (float) delta / getMoveTime();
+			float realX = player.getRealX();
+			float realY = player.getRealY();
 			
 			if(realX > playerX)
-				realX -= smoothShift;
+				player.setRealX(realX -= smoothShift);
 			else if(realX < playerX)
-				realX += smoothShift;
+				player.setRealX(realX += smoothShift);
 			if(realY > playerY)
-				realY -= smoothShift;
+				player.setRealY(realY -= smoothShift);
 			else if(realY < playerY)
-				realY += smoothShift;
+				player.setRealY(realY += smoothShift);
 			
 			if(moveTimer < 0){
 				player.setMoving(false);
 				resetMoveTimer();
 				smoothShift = 0;
-				realX = playerX;
-				realY = playerY;
+				player.setRealX(realX = playerX);
+				player.setRealY(realY = playerY);
+				mapController.getCellAt(player.getPrevX(), player.getPrevY()).deleteElement(player);
+				mapController.getCellAt(player.getX(), player.getY()).addElement(player);
+				player.setPrevX(player.getX());
+				player.setPrevY(player.getY());
 			}
 		}
-		
-		if(colMap[playerY][playerX] == Door.ID && map.getDoor().isOpen()){
+		Cell cell = mapController.getCellAt(player.getX(), player.getY());
+		if(cell.isContains(ElementType.Player) && cell.isContains(ElementType.Door) && ((Door) cell.getElement(ElementType.Door)).isOpen()){
 			try {
-				game.getCurrentState().init(game.getContainer(), game);
-				game.enterState(Game.menu);
+				game.initStatesList(game.getContainer());
+				((GameOver) game.getState(Game.gameOver)).setScore(player.getScore());
+				((GameOver) game.getState(Game.gameOver)).setLevelCode(((Play)game.getCurrentState()).getLevelCode());
+				game.enterState(Game.gameOver);
 			} catch (SlickException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 	}
 
 	private void resetMoveTimer() {
-		// TODO Auto-generated method stub
 		moveTimer = getMoveTime();
 	}
 	
@@ -87,56 +101,35 @@ public class PlayerController implements IPlayerController {
 	}
 
 	@Override
-	public void move(Direction dir) {
-		// TODO Auto-generated method stub
-		int[][] colMap = map.getColMap();
+	public void movePlayer(Direction dir) {
 		int x = player.getX(), y = player.getY();
+		MapController mapController = ((Play) game.getCurrentState()).getMapController();
 		
-		if(!player.isMoving() && dir == Direction.Up && colMap[y-1][x] != SolidWall.ID){
+		if(!player.isMoving() && dir == Direction.Up && !mapController.getCellAt(x, y-1).isContains(ElementType.SolidWall)){
 			player.setMoving(true);
 			player.setCurrentDir(Direction.Up);
 			player.setY(y-1);
-			if(colMap[y][x] == Player.ID)
-				colMap[y][x] = 0;
-			if(colMap[y-1][x] != Door.ID)
-				colMap[y-1][x] = Player.ID;
-			map.setColMap(colMap);
-		}else if(!player.isMoving() && dir == Direction.Down && colMap[y+1][x] != SolidWall.ID){
+		}else if(!player.isMoving() && dir == Direction.Down && !mapController.getCellAt(x, y+1).isContains(ElementType.SolidWall)){
 			player.setMoving(true);
 			player.setCurrentDir(Direction.Down);
 			player.setY(y+1);
-			if(colMap[y][x] == Player.ID)
-				colMap[y][x] = 0;
-			if(colMap[y+1][x] != Door.ID)
-				colMap[y+1][x] = Player.ID;
-			map.setColMap(colMap);
-		}else if(!player.isMoving() && dir == Direction.Left && colMap[y][x-1] != SolidWall.ID){
+		}else if(!player.isMoving() && dir == Direction.Left && !mapController.getCellAt(x-1, y).isContains(ElementType.SolidWall)){
 			player.setMoving(true);
 			player.setCurrentDir(Direction.Left);
 			player.setX(x-1);
-			if(colMap[y][x] == Player.ID)
-				colMap[y][x] = 0;
-			if(colMap[y][x-1] != Door.ID)
-				colMap[y][x-1] = Player.ID;
-			map.setColMap(colMap);
-		}else if(!player.isMoving() && dir == Direction.Right && colMap[y][x+1] != SolidWall.ID){
+		}else if(!player.isMoving() && dir == Direction.Right && !mapController.getCellAt(x+1, y).isContains(ElementType.SolidWall)){
 			player.setMoving(true);
 			player.setCurrentDir(Direction.Right);
 			player.setX(x+1);
-			if(colMap[y][x] == Player.ID)
-				colMap[y][x] = 0;
-			if(colMap[y][x+1] != Door.ID)
-				colMap[y][x+1] = Player.ID;
-			map.setColMap(colMap);
 		}
 	}
 
 	public float getRealX() {
-		return realX;
+		return player.getRealX();
 	}
 
 	public float getRealY() {
-		return realY;
+		return player.getRealY();
 	}
 	
 }
