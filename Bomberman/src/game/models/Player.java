@@ -19,12 +19,27 @@ public class Player extends DynamicMapElement{
 	private boolean moving;
 	
 	private int score;
-	private Direction currentDir;
 	
+	private Direction currentDir;
+	/**
+	 * Simple constructor method.
+	 * @param x	X coordinate of the player.
+	 * @param y Y coordinate of the player.
+	 * @param dir Direction of the player.
+	 */
 	public Player(int x, int y, Direction dir){
 		this( x, y, dir, 3, 1, 1, .6f);
 	}
-	
+	/**
+	 * Detailed constructor method.
+	 * @param x	X coordinate of the player.
+	 * @param y Y coordinate of the player.
+	 * @param dir Direction of the player.
+	 * @param lifeCount Number of lives of player.
+	 * @param bombCount	Bomb count of the player.
+	 * @param explosionRange Explosion range of bombs planted by this player.
+	 * @param moveSpeed	Movement speed of the player.
+	 */
 	public Player(int x, int y, Direction dir, int lifeCount, int bombCount, int explosionRange, float moveSpeed) {
 
 		super(x, y, ElementType.Player);
@@ -45,18 +60,26 @@ public class Player extends DynamicMapElement{
 		
 		currentDir = dir;
 	}
-	
+	/**
+	 * Kills player. Player loses 1 life.
+	 */
 	public void kill(){
 		if(alive)
 			lives--;
 		if(lives < 0)
 			alive = false;
 	}
-	
+	/**
+	 * Adds score points to player's current score.
+	 * @param score Score point amount to be added.
+	 */
 	public void addScore(int score){
 		this.score += score;
 	}
-	
+	/**
+	 * Increases stats of the player by the given power up type.
+	 * @param power Which power up is acquired.
+	 */
 	public void powerUp(PowerUpType power){
 		switch (power) {
 		case Speed:

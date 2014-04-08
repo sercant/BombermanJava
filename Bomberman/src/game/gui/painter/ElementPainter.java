@@ -44,7 +44,18 @@ public class ElementPainter {
 	private Graphics g;
 	private float topShift;
 	private float sideShift;
-	
+	/**
+	 * Constructor method.
+	 * @param game Game instance that will be painted in to
+	 * @param cam Camera instace
+	 * @param solidWallIMG Image of the solid wall.
+	 * @param brickWallIMG Image of the brick wall.
+	 * @param bombIMG Image of the bomb.
+	 * @param doorIMG Image of the  door.
+	 * @param explosionIMG Image of the explosion.
+	 * @param playerIMG Image of the player.
+	 * @param powerUpIMG Image of the power up.
+	 */
 	public ElementPainter(StateBasedGame game, Camera cam, Image solidWallIMG, Image brickWallIMG, Image bombIMG, Image doorIMG, Image explosionIMG, Image playerIMG, Image powerUpIMG){
 		this.solidWallIMG = filterAndScale(solidWallIMG);
 		this.brickWallIMG = filterAndScale(brickWallIMG);
@@ -69,7 +80,11 @@ public class ElementPainter {
 		
 		//sprite init
 	}
-	
+	/**
+	 * Filters to nearest corner and scales the image.
+	 * @param image Image to be scaled.
+	 * @return Scaled image 
+	 */
 	private Image filterAndScale(Image image){
 		if(image != null){
 			image.setFilter(Image.FILTER_NEAREST);
@@ -77,7 +92,10 @@ public class ElementPainter {
 		}else
 			return null;
 	}
-	
+	/**
+	 * Draws the elements to screen.
+	 * @param g Graphics instance which the images will be drawn.
+	 */
 	public void draw(Graphics g) {
 		this.g = g;
 		MapController mapController = ((Play) game.getCurrentState()).getMapController();
@@ -105,18 +123,24 @@ public class ElementPainter {
 		while(iterator.hasNext()){
 			MapElement e = (MapElement) iterator.next();
 			if(e.getType() == ElementType.Player){
-				drawTopMenu(g, e);
+				drawTopMenu(e);
 			}
 			drawElement(e);
 		}
 	}
-	private void drawTopMenu(Graphics g2, MapElement e) {
-		
+	/**
+	 * Draws the top info panel
+	 * @param e Player element
+	 */
+	private void drawTopMenu(MapElement e) {
 		g.fill(topRect, topRectFill);//fix 800 later to game width
 		g.drawString("LIVES: " + ((Player) e).getLives(), 20, topRect.getHeight() / 2);
 		g.drawString("SCORE: " + ((Player) e).getScore(), 200, topRect.getHeight() / 2);
 	}
-
+	/**
+	 * Draws the given MapElement to graphics instance.
+	 * @param e MapElement to be drawn.
+	 */
 	private void drawElement(MapElement e) {
 		g.setColor(Color.black);
 		switch (e.getType()) {
@@ -134,7 +158,10 @@ public class ElementPainter {
 		}
 		g.setColor(Color.white);
 	}
-
+	/**
+	 * Starts playing the player walk animation.
+	 * @param dir Direction of the animation.
+	 */
 	public void startPlayerAnim(Direction dir){
 		switch (dir) {
 		case Down:
@@ -153,6 +180,10 @@ public class ElementPainter {
 			break;
 		}
 	}
+	/**
+	 * Stops the player walk animation.
+	 * @param dir Final direction of the animation.
+	 */
 	public void stopPlayerAnim(Direction dir) {
 		switch (dir) {
 		case Down:

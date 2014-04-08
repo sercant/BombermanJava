@@ -19,7 +19,9 @@ public class Menu extends BasicGameState {
 	public Menu(int state){
 		ID = state;
 	}
-
+	/**
+	 * Initializes the state.
+	 */
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg)
 			throws SlickException {
@@ -35,7 +37,9 @@ public class Menu extends BasicGameState {
 		
 		selectedButton = 0;
 	}
-
+	/**
+	 * Render part of the state. This is where the graphics printed on the screen.
+	 */
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
 			throws SlickException {
@@ -46,7 +50,9 @@ public class Menu extends BasicGameState {
 			g.drawString(menuButtons[i], gc.getWidth() / 2, j);
 		}
 	}
-
+	/**
+	 * Update part of the state. This is where all the changes made.
+	 */
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta)
 			throws SlickException {

@@ -4,7 +4,12 @@ public abstract class DynamicMapElement extends MapElement {
 	
 	private int prevX;
 	private int prevY;
-
+	/**
+	 * Constructor method.
+	 * @param x X coordinate of the dynamic map element.
+	 * @param y Y coordinate of the dynamic map element.
+	 * @param type Type of the element.
+	 */
 	public DynamicMapElement(int x, int y, ElementType type) {
 		super(x, y, type);
 		this.prevX = x;

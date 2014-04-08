@@ -18,14 +18,18 @@ public class GameOver extends BasicGameState {
 	public GameOver(int state){
 		this.ID = state;
 	}
-
+	/**
+	 * Initializes the state.
+	 */
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg)
 			throws SlickException {
 		// TODO Auto-generated method stub
 		
 	}
-
+	/**
+	 * Render part of the state. This is where the graphics printed on the screen.
+	 */
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
 			throws SlickException {
@@ -35,7 +39,9 @@ public class GameOver extends BasicGameState {
 		g.drawString("Level Code: " + levelCode + "", gc.getWidth() / 2, gc.getHeight() / 2 + 20);
 		g.drawString("Press ESC to return Main Menu.", gc.getWidth() / 2, gc.getHeight() / 2 + 60);
 	}
-
+	/**
+	 * Update part of the state. This is where all the changes made.
+	 */
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta)
 			throws SlickException {

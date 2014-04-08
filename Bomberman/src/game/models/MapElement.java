@@ -7,7 +7,12 @@ public abstract class MapElement {
 	private int y;
 	private float realX;
 	private float realY;
-	
+	/**
+	 * Constructor method for map element.
+	 * @param x X coordinate of the map element.
+	 * @param y Y coordinate of the map element.
+	 * @param type Type of the element.
+	 */
     public MapElement(int x, int y, ElementType type) {
         this.x = x;
         this.y = y;

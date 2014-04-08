@@ -33,7 +33,9 @@ public class Play extends BasicGameState {
 	public Play(int state){
 		this.ID = state;
 	}
-
+	/**
+	 * Initializes the state.
+	 */
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg)
 			throws SlickException {
@@ -58,7 +60,9 @@ public class Play extends BasicGameState {
 		painter = new ElementPainter(sbg, cam, new Image("res/solidWall.png"), new Image("res/brickWall.png"), null, new Image("res/door.png"), null, new Image("res/playerwalk.png"), null);
 		
 	}
-
+	/**
+	 * Render part of the state. This is where the graphics printed on the screen.
+	 */
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
 			throws SlickException {
@@ -66,7 +70,9 @@ public class Play extends BasicGameState {
 		painter.draw(g);
 		g.drawString("X: " + cam.getCameraX() + " Y: " + cam.getCameraY(), 300, 10);
 	}
-
+	/**
+	 * Update part of the state. This is where all the changes made.
+	 */
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta)
 			throws SlickException {
@@ -90,7 +96,7 @@ public class Play extends BasicGameState {
 		return mapController;
 	}
 
-	public int getLevelCode() {
+	public int getLevelCode() {///WILL BE IMPLEMENTED LATER
 		// TODO Auto-generated method stub
 		return 0;
 	}
