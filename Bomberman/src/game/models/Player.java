@@ -16,6 +16,8 @@ public class Player extends DynamicMapElement{
 	
 	private boolean alive;
 	
+	private boolean killed;
+	
 	private boolean moving;
 	
 	private int score;
@@ -28,7 +30,7 @@ public class Player extends DynamicMapElement{
 	 * @param dir Direction of the player.
 	 */
 	public Player(int x, int y, Direction dir){
-		this( x, y, dir, 3, 1, 1, .6f);
+		this( x, y, dir, 3, 1, 5, .6f);
 	}
 	/**
 	 * Detailed constructor method.
@@ -59,11 +61,14 @@ public class Player extends DynamicMapElement{
 		score = 0;
 		
 		currentDir = dir;
+		
+		killed = false;
 	}
 	/**
 	 * Kills player. Player loses 1 life.
 	 */
 	public void kill(){
+		killed = true;
 		if(alive)
 			lives--;
 		if(lives < 0)
@@ -166,5 +171,11 @@ public class Player extends DynamicMapElement{
 
 	public void setCurrentDir(Direction currentDir) {
 		this.currentDir = currentDir;
+	}
+	public boolean isKilled() {
+		return killed;
+	}
+	public void setKilled(boolean killed) {
+		this.killed = killed;
 	}
 }

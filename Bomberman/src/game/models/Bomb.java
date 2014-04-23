@@ -1,6 +1,6 @@
 package game.models;
 
-public class Bomb extends IndestructibleElement{
+public class Bomb extends DestructibleMapElement{
 	
 	private int detonationTime;
 	private int explosionRange;
@@ -8,7 +8,7 @@ public class Bomb extends IndestructibleElement{
 	private boolean exploded;
 
 	public Bomb(int x, int y, int explosionRange, int detonationTime) {
-		super(x, y, ElementType.Door);
+		super(x, y, ElementType.Bomb);
 		this.detonationTime = detonationTime;
 		this.explosionRange = explosionRange;
 		this.delta = 0;
@@ -37,4 +37,10 @@ public class Bomb extends IndestructibleElement{
 		this.exploded = exploded;
 	}
 	
+	public void setDestroyed(boolean destroyed){
+		this.destroyed = destroyed;
+		if(destroyed){
+			this.exploded = true;
+		}
+	}
 }

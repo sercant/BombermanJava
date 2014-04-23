@@ -7,5 +7,6 @@ public enum ElementType {
 	Explosion,
 	Player,
 	PowerUp,
-	SolidWall
+	SolidWall,
+	Enemy
 }

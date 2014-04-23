@@ -2,11 +2,11 @@ package game.models;
 
 
 public abstract class MapElement {
-	private ElementType type;
-	private int x;
-	private int y;
-	private float realX;
-	private float realY;
+	protected ElementType type;
+	protected int x;
+	protected int y;
+	protected float realX;
+	protected float realY;
 	/**
 	 * Constructor method for map element.
 	 * @param x X coordinate of the map element.

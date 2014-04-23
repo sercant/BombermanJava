@@ -153,6 +153,15 @@ public class ElementPainter {
 		case Player:
 			playerAnim.draw(e.getRealX() * Game.TILESIZE + sideShift, e.getRealY() * Game.TILESIZE + topShift);
 			break;
+		case Bomb:
+			bombIMG.draw(e.getRealX() * Game.TILESIZE + sideShift, e.getRealY() * Game.TILESIZE + topShift);
+			break;
+		case Explosion:
+			explosionIMG.draw(e.getRealX() * Game.TILESIZE + sideShift, e.getRealY() * Game.TILESIZE + topShift);
+			break;
+		case BrickWall:
+			brickWallIMG.draw(e.getRealX() * Game.TILESIZE + sideShift, e.getRealY() * Game.TILESIZE + topShift);
+			break;
 		default:
 			break;
 		}

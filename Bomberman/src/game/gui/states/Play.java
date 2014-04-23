@@ -1,6 +1,9 @@
 package game.gui.states;
 
+import game.controllers.BombController;
+import game.controllers.BrickWallController;
 import game.controllers.DoorController;
+import game.controllers.ExplosionController;
 import game.controllers.MapController;
 import game.controllers.PlayerController;
 import game.gui.camera.Camera;
@@ -29,6 +32,9 @@ public class Play extends BasicGameState {
 	private PlayerController playerController;
 	private DoorController doorController;
 	private MapController mapController;
+	private BombController bombController;
+	private ExplosionController explosionController;
+	private BrickWallController brickWallController;
 	
 	public Play(int state){
 		this.ID = state;
@@ -55,9 +61,15 @@ public class Play extends BasicGameState {
 			e.printStackTrace();
 		}
 		
+		bombController = new BombController(sbg);
+		
+		explosionController = new ExplosionController(sbg);
+		
+		brickWallController = new BrickWallController(sbg);
+		
 		cam = new Camera(gc, mapController.getMapWidth(), mapController.getMapHeight());
 		
-		painter = new ElementPainter(sbg, cam, new Image("res/solidWall.png"), new Image("res/brickWall.png"), null, new Image("res/door.png"), null, new Image("res/playerwalk.png"), null);
+		painter = new ElementPainter(sbg, cam, new Image("res/solidWall.png"), new Image("res/brickWall.png"), new Image("res/brickWall.png"), new Image("res/door.png"), new Image("res/door.png"), new Image("res/playerwalk.png"), null);
 		
 	}
 	/**
@@ -77,7 +89,10 @@ public class Play extends BasicGameState {
 	public void update(GameContainer gc, StateBasedGame sbg, int delta)
 			throws SlickException {
 		playerController.update(delta);
-		doorController.update(delta);
+		doorController.update(delta);      
+		bombController.update(delta);
+		explosionController.update(delta);
+		brickWallController.update(delta);
 		cam.centerOn(playerController.getRealX() * Game.TILESIZE, playerController.getRealY() * Game.TILESIZE);
 	}
 
@@ -100,4 +115,15 @@ public class Play extends BasicGameState {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	public BombController getBombController() {
+		// TODO Auto-generated method stub
+		return bombController;
+	}
+	public ExplosionController getExplosionController() {
+		return explosionController;
+	}
+	public BrickWallController getBrickWallController() {
+		return brickWallController;
+	}
+	
 }

@@ -46,7 +46,11 @@ public class PlayerController implements IPlayerController {
 		}if (input.isKeyDown(Input.KEY_RIGHT)) {
 			movePlayer(Direction.Right);
 		}
-		
+		///TEMPORARY!!!
+		if (input.isKeyDown(Input.KEY_Z)) {
+			((Play)game.getCurrentState()).getBrickWallController().addBrickWall(5, 1);
+		}
+		////////////////
 		if(player.isMoving()){
 			((Play) game.getCurrentState()).getElementPainter().startPlayerAnim(player.getCurrentDir());
 		}else
@@ -90,6 +94,9 @@ public class PlayerController implements IPlayerController {
 				e.printStackTrace();
 			}
 		}
+		if(input.isKeyDown(Input.KEY_LCONTROL)){
+			placeBomb();
+		}
 	}
 
 	private void resetMoveTimer() {
@@ -123,13 +130,28 @@ public class PlayerController implements IPlayerController {
 			player.setX(x+1);
 		}
 	}
-
+	private void placeBomb(){
+		MapController mapController = ((Play) game.getCurrentState()).getMapController();
+		Cell cell = mapController.getCellAt(player.getX(), player.getY());
+		if(!cell.isContains(ElementType.Bomb)){
+			BombController bc = ((Play) game.getCurrentState()).getBombController();
+			if(player.isMoving()){//this part may change later
+				bc.spawnBomb(player.getPrevX(), player.getPrevY(), player);
+			}else{
+				bc.spawnBomb(player.getX(), player.getY(), player);
+			}
+		}
+	}
 	public float getRealX() {
 		return player.getRealX();
 	}
 
 	public float getRealY() {
 		return player.getRealY();
+	}
+
+	public void addScore(int score) {
+		player.addScore(score);
 	}
 	
 }

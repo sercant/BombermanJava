@@ -1,12 +1,12 @@
 package game.controllers;
 
-import java.util.Iterator;
-
 import game.controllers.interfaces.GeneralController;
 import game.models.Cell;
 import game.models.Map;
 import game.models.MapElement;
 import game.models.SolidWall;
+
+import java.util.Iterator;
 
 import org.newdawn.slick.state.StateBasedGame;
 
