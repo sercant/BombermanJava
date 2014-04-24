@@ -91,7 +91,7 @@ public class Cell {
 				switch (e.getType()) {
 				case BrickWall:
 					((DestructibleMapElement) e).setDestroyed(true);
-					break;
+					return;
 				case Door:
 					((DestructibleMapElement) e).setDestroyed(true);
 					break;

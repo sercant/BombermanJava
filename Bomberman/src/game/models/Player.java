@@ -100,7 +100,12 @@ public class Player extends DynamicMapElement{
 			break;
 		}
 	}
-
+	public void initLoc(int x, int y){
+		this.realX = this.x = x;
+		this.realY = this.y = y;
+		this.moving = false;
+		this.currentDir = Direction.Down;
+	}
 	public void setActiveBombCount(int activeBombCount) {
 		this.activeBombCount = activeBombCount;
 	}

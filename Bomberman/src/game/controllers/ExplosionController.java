@@ -22,6 +22,9 @@ public class ExplosionController implements GeneralController{
 	}
 	@Override
 	public void update(int delta) {
+		if(explosions.isEmpty()){
+			return;
+		}
 		Iterator<Explosion> iterator = explosions.listIterator();
 		LinkedList<Explosion> explosionsToRemove = new LinkedList<Explosion>();
 		while(iterator.hasNext()){

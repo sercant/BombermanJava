@@ -21,6 +21,9 @@ public class BrickWallController implements GeneralController{
 
 	@Override
 	public void update(int delta) {
+		if(brickWalls.isEmpty()){
+			return;
+		}
 		Iterator<BrickWall> iterator = brickWalls.listIterator();
 		LinkedList<BrickWall> brickWallsToRemove = new LinkedList<BrickWall>();
 		while(iterator.hasNext()){
@@ -41,5 +44,9 @@ public class BrickWallController implements GeneralController{
 		BrickWall bw = new BrickWall(x, y);
 		brickWalls.add(bw);
 		((Play)game.getCurrentState()).getMapController().getCellAt(x, y).addElement(bw);
+	}
+
+	public void setBrickWalls(LinkedList<BrickWall> brickWalls) {
+		this.brickWalls = brickWalls;
 	}
 }

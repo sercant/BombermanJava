@@ -46,11 +46,7 @@ public class PlayerController implements IPlayerController {
 		}if (input.isKeyDown(Input.KEY_RIGHT)) {
 			movePlayer(Direction.Right);
 		}
-		///TEMPORARY!!!
-		if (input.isKeyDown(Input.KEY_Z)) {
-			((Play)game.getCurrentState()).getBrickWallController().addBrickWall(5, 1);
-		}
-		////////////////
+		
 		if(player.isMoving()){
 			((Play) game.getCurrentState()).getElementPainter().startPlayerAnim(player.getCurrentDir());
 		}else
@@ -109,37 +105,61 @@ public class PlayerController implements IPlayerController {
 
 	@Override
 	public void movePlayer(Direction dir) {
+		if(player.isMoving()){
+			return;
+		}
+		
 		int x = player.getX(), y = player.getY();
 		MapController mapController = ((Play) game.getCurrentState()).getMapController();
-		
-		if(!player.isMoving() && dir == Direction.Up && !mapController.getCellAt(x, y-1).isContains(ElementType.SolidWall)){
-			player.setMoving(true);
-			player.setCurrentDir(Direction.Up);
-			player.setY(y-1);
-		}else if(!player.isMoving() && dir == Direction.Down && !mapController.getCellAt(x, y+1).isContains(ElementType.SolidWall)){
-			player.setMoving(true);
-			player.setCurrentDir(Direction.Down);
-			player.setY(y+1);
-		}else if(!player.isMoving() && dir == Direction.Left && !mapController.getCellAt(x-1, y).isContains(ElementType.SolidWall)){
-			player.setMoving(true);
-			player.setCurrentDir(Direction.Left);
-			player.setX(x-1);
-		}else if(!player.isMoving() && dir == Direction.Right && !mapController.getCellAt(x+1, y).isContains(ElementType.SolidWall)){
-			player.setMoving(true);
-			player.setCurrentDir(Direction.Right);
-			player.setX(x+1);
+		if(mapController.getCellAt(x, y).isContains(ElementType.Explosion)){
+			return;
 		}
+		
+		int toX = x, toY = y;
+		
+		switch (dir) {
+		case Up:
+			toY--;
+			break;
+		case Down:
+			toY++;
+			break;
+		case Left:
+			toX--;
+			break;
+		case Right:
+			toX++;
+			break;
+		default:
+			break;
+		}
+		
+		Cell cell = mapController.getCellAt(toX, toY);
+		if(		cell.isContains(ElementType.SolidWall)
+				||cell.isContains(ElementType.BrickWall)){
+			return;
+		}
+		//finally
+		player.setMoving(true);
+		player.setCurrentDir(dir);
+		player.setX(toX);
+		player.setY(toY);
+
 	}
 	private void placeBomb(){
+		if(player.isMoving()){
+			return;
+		}
 		MapController mapController = ((Play) game.getCurrentState()).getMapController();
 		Cell cell = mapController.getCellAt(player.getX(), player.getY());
 		if(!cell.isContains(ElementType.Bomb)){
 			BombController bc = ((Play) game.getCurrentState()).getBombController();
-			if(player.isMoving()){//this part may change later
-				bc.spawnBomb(player.getPrevX(), player.getPrevY(), player);
-			}else{
-				bc.spawnBomb(player.getX(), player.getY(), player);
-			}
+			bc.spawnBomb(player.getX(), player.getY(), player);
+//			if(player.isMoving()){//this part may change later
+//				bc.spawnBomb(player.getPrevX(), player.getPrevY(), player);
+//			}else{
+//				bc.spawnBomb(player.getX(), player.getY(), player);
+//			}
 		}
 	}
 	public float getRealX() {

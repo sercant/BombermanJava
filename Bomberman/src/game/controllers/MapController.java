@@ -4,7 +4,6 @@ import game.controllers.interfaces.GeneralController;
 import game.models.Cell;
 import game.models.Map;
 import game.models.MapElement;
-import game.models.SolidWall;
 
 import java.util.Iterator;
 
@@ -35,19 +34,6 @@ public class MapController implements GeneralController{
 			map.addMapElement(e);
 		}catch(ArrayIndexOutOfBoundsException ex){
 			throw ex;
-		}
-	}
-
-	public void init() {
-		for (int i = 0; i < map.getTileCountY(); i++)
-		{
-			for (int j = 0; j < map.getTileCountX(); j++)
-			{
-				if(		i == 0 || i == map.getTileCountY()-1 
-					||	j == 0 || j == map.getTileCountX() - 1 
-					||	(i % 2 == 0 && j % 2 == 0))
-					map.addMapElement(new SolidWall(j, i));
-			}
 		}
 	}
 

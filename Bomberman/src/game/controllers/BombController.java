@@ -24,6 +24,9 @@ public class BombController implements GeneralController{
 	
 	@Override
 	public void update(int delta) {
+		if(bombs.isEmpty()){
+			return;
+		}
 		Iterator<Bomb> iterator = bombs.listIterator();
 		LinkedList<Bomb> bombsToRemove = new LinkedList<Bomb>();
 		while(iterator.hasNext()){
