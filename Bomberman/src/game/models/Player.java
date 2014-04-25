@@ -30,7 +30,7 @@ public class Player extends DynamicMapElement{
 	 * @param dir Direction of the player.
 	 */
 	public Player(int x, int y, Direction dir){
-		this( x, y, dir, 3, 1, 5, .6f);
+		this( x, y, dir, 3, 1, 2, .6f);
 	}
 	/**
 	 * Detailed constructor method.
@@ -88,21 +88,21 @@ public class Player extends DynamicMapElement{
 	public void powerUp(PowerUpType power){
 		switch (power) {
 		case Speed:
-			moveSpeed = moveSpeed < 5.f ? moveSpeed + .1f : moveSpeed;
+			moveSpeed = moveSpeed < 1.5f ? moveSpeed + .2f : moveSpeed;
 			break;
 		case BombCount:
 			bombCount = bombCount < 7 ? bombCount + 1 : bombCount;
 			break;
 		case ExplosionRange:
-			explosionRange = explosionRange < 8 ? explosionRange + 1 : explosionRange;
+			explosionRange = explosionRange < 6 ? explosionRange + 1 : explosionRange;
 			break;
 		default:
 			break;
 		}
 	}
 	public void initLoc(int x, int y){
-		this.realX = this.x = x;
-		this.realY = this.y = y;
+		this.realX = this.x = this.prevX = x;
+		this.realY = this.y = this.prevY = y;
 		this.moving = false;
 		this.currentDir = Direction.Down;
 	}

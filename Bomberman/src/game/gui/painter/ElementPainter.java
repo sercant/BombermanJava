@@ -98,7 +98,7 @@ public class ElementPainter {
 	 */
 	public void draw(Graphics g) {
 		this.g = g;
-		MapController mapController = ((Play) game.getCurrentState()).getMapController();
+		MapController mapController = ((Play) game.getState(Game.play)).getMapController();
 		topShift = topSpacing - cam.getCameraY();
 		sideShift = -cam.getCameraX();
 		LinkedList<MapElement> temp = new LinkedList<MapElement>();
@@ -134,8 +134,13 @@ public class ElementPainter {
 	 */
 	private void drawTopMenu(MapElement e) {
 		g.fill(topRect, topRectFill);//fix 800 later to game width
-		g.drawString("LIVES: " + ((Player) e).getLives(), 20, topRect.getHeight() / 2);
-		g.drawString("SCORE: " + ((Player) e).getScore(), 200, topRect.getHeight() / 2);
+		g.drawString("LIVES: " + ((Player) e).getLives(), 20, topRect.getHeight() / 3);
+		g.drawString("SCORE: " + ((Player) e).getScore(), 200, topRect.getHeight() / 4);
+		g.drawString("BOMB: " + ((Player) e).getBombCount(), 200, 2 * topRect.getHeight() / 4);
+		g.drawString("SPEED: " + ((Player) e).getMoveSpeed(), 300, topRect.getHeight() / 4);
+		g.drawString("EXPLOSION: " + ((Player) e).getExplosionRange(), 300, 2 * topRect.getHeight() / 4);
+		
+		g.drawString("CURRENT STAGE: " + (((Play) game.getState(Game.play)).getCurrentDifficulty() + 1), 450, topRect.getHeight() / 3);
 	}
 	/**
 	 * Draws the given MapElement to graphics instance.
@@ -161,6 +166,9 @@ public class ElementPainter {
 			break;
 		case BrickWall:
 			brickWallIMG.draw(e.getRealX() * Game.TILESIZE + sideShift, e.getRealY() * Game.TILESIZE + topShift);
+			break;
+		case PowerUp:
+			powerUpIMG.draw(e.getRealX() * Game.TILESIZE + sideShift, e.getRealY() * Game.TILESIZE + topShift);
 			break;
 		default:
 			break;

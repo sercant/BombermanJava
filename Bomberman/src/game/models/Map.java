@@ -1,8 +1,8 @@
 package game.models;
 
-import java.util.Iterator;
-
 import game.gui.main.Game;
+
+import java.util.Iterator;
 
 
 public class Map {
@@ -25,6 +25,11 @@ public class Map {
 				cells[y][x] = new Cell();
 			}
 		}
+	}
+	public Map(Map map) {
+		this.cells = map.getCells();
+		this.tileCountX = map.getTileCountX();
+		this.tileCountY = map.getTileCountY();
 	}
 	/**
 	 * Adds MapElement to the map. Throws exception if element's x or y coordinates out of bounds.
@@ -88,4 +93,8 @@ public class Map {
 	public int getTileCountY() {
 		return tileCountY;
 	}
+	public Cell[][] getCells() {
+		return cells;
+	}
+	
 }

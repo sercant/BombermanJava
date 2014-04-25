@@ -9,6 +9,7 @@ import game.models.Direction;
 import game.models.Door;
 import game.models.ElementType;
 import game.models.Player;
+import game.models.PowerUpElement;
 
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
@@ -79,8 +80,7 @@ public class PlayerController implements IPlayerController {
 				player.setPrevY(player.getY());
 			}
 		}
-		Cell cell = mapController.getCellAt(player.getX(), player.getY());
-		if(cell.isContains(ElementType.Player) && cell.isContains(ElementType.Door) && ((Door) cell.getElement(ElementType.Door)).isOpen()){
+		if(!player.isAlive()){
 			try {
 				game.initStatesList(game.getContainer());
 				((GameOver) game.getState(Game.gameOver)).setScore(player.getScore());
@@ -90,6 +90,23 @@ public class PlayerController implements IPlayerController {
 				e.printStackTrace();
 			}
 		}
+		Cell cell = mapController.getCellAt(player.getX(), player.getY());
+		if(!player.isMoving()){
+			if(cell.isContains(ElementType.Door) && ((Door) cell.getElement(ElementType.Door)).isOpen())
+				((Play) game.getState(Game.play)).levelCompleted(game);
+			if(cell.isContains(ElementType.PowerUp)){
+				PowerUpElement pe = (PowerUpElement)cell.getElement(ElementType.PowerUp);
+				player.powerUp(pe.getPowerType());
+				pe.setTaken(true);
+			}
+			if(player.isKilled()){
+				player.setKilled(false);
+				cell.deleteElement(player);
+				player.initLoc(1, 1);
+				mapController.getCellAt(player.getX(), player.getY()).addElement(player);
+			}		
+		}
+		
 		if(input.isKeyDown(Input.KEY_LCONTROL)){
 			placeBomb();
 		}
@@ -136,7 +153,8 @@ public class PlayerController implements IPlayerController {
 		
 		Cell cell = mapController.getCellAt(toX, toY);
 		if(		cell.isContains(ElementType.SolidWall)
-				||cell.isContains(ElementType.BrickWall)){
+				|| cell.isContains(ElementType.BrickWall)
+				|| cell.isContains(ElementType.Bomb)){
 			return;
 		}
 		//finally
@@ -152,9 +170,10 @@ public class PlayerController implements IPlayerController {
 		}
 		MapController mapController = ((Play) game.getCurrentState()).getMapController();
 		Cell cell = mapController.getCellAt(player.getX(), player.getY());
-		if(!cell.isContains(ElementType.Bomb)){
+		if(!cell.isContains(ElementType.Bomb) && player.getActiveBombCount() < player.getBombCount()){
 			BombController bc = ((Play) game.getCurrentState()).getBombController();
 			bc.spawnBomb(player.getX(), player.getY(), player);
+			player.setActiveBombCount(player.getActiveBombCount() + 1);
 //			if(player.isMoving()){//this part may change later
 //				bc.spawnBomb(player.getPrevX(), player.getPrevY(), player);
 //			}else{
@@ -173,5 +192,11 @@ public class PlayerController implements IPlayerController {
 	public void addScore(int score) {
 		player.addScore(score);
 	}
-	
+	public void bombExploded(){
+		player.setActiveBombCount(player.getActiveBombCount() - 1);
+	}
+
+	public Player getPlayer() {
+		return player;
+	}
 }

@@ -37,10 +37,16 @@ public class BombController implements GeneralController{
 				explode(b);
 			}
 		}
+		if(bombsToRemove.isEmpty()){
+			return;
+		}
+		PlayerController pc = ((Play)game.getCurrentState()).getPlayerController();
+		
 		iterator = bombsToRemove.listIterator();
 		while(iterator.hasNext()){
 			Bomb b = (Bomb) iterator.next();
 			bombs.remove(b);
+			pc.bombExploded();
 		}
 	}
 
