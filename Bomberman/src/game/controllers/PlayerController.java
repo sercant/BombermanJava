@@ -9,6 +9,7 @@ import game.models.Direction;
 import game.models.Door;
 import game.models.ElementType;
 import game.models.Player;
+import game.models.PowerUpElement;
 
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
@@ -79,8 +80,7 @@ public class PlayerController implements IPlayerController {
 				player.setPrevY(player.getY());
 			}
 		}
-		Cell cell = mapController.getCellAt(player.getX(), player.getY());
-		if(cell.isContains(ElementType.Player) && cell.isContains(ElementType.Door) && ((Door) cell.getElement(ElementType.Door)).isOpen()){
+		if(!player.isAlive()){
 			try {
 				game.initStatesList(game.getContainer());
 				((GameOver) game.getState(Game.gameOver)).setScore(player.getScore());
@@ -89,6 +89,26 @@ public class PlayerController implements IPlayerController {
 			} catch (SlickException e) {
 				e.printStackTrace();
 			}
+		}
+		Cell cell = mapController.getCellAt(player.getX(), player.getY());
+		if(!player.isMoving()){
+			if(cell.isContains(ElementType.Door) && ((Door) cell.getElement(ElementType.Door)).isOpen())
+				((Play) game.getState(Game.play)).levelCompleted(game);
+			if(cell.isContains(ElementType.PowerUp)){
+				PowerUpElement pe = (PowerUpElement)cell.getElement(ElementType.PowerUp);
+				player.powerUp(pe.getPowerType());
+				pe.setTaken(true);
+			}
+			if(player.isKilled()){
+				player.setKilled(false);
+				cell.deleteElement(player);
+				player.initLoc(1, 1);
+				mapController.getCellAt(player.getX(), player.getY()).addElement(player);
+			}		
+		}
+		
+		if(input.isKeyDown(Input.KEY_LCONTROL)){
+			placeBomb();
 		}
 	}
 
@@ -102,28 +122,65 @@ public class PlayerController implements IPlayerController {
 
 	@Override
 	public void movePlayer(Direction dir) {
+		if(player.isMoving()){
+			return;
+		}
+		
 		int x = player.getX(), y = player.getY();
 		MapController mapController = ((Play) game.getCurrentState()).getMapController();
+		if(mapController.getCellAt(x, y).isContains(ElementType.Explosion)){
+			return;
+		}
 		
-		if(!player.isMoving() && dir == Direction.Up && !mapController.getCellAt(x, y-1).isContains(ElementType.SolidWall)){
-			player.setMoving(true);
-			player.setCurrentDir(Direction.Up);
-			player.setY(y-1);
-		}else if(!player.isMoving() && dir == Direction.Down && !mapController.getCellAt(x, y+1).isContains(ElementType.SolidWall)){
-			player.setMoving(true);
-			player.setCurrentDir(Direction.Down);
-			player.setY(y+1);
-		}else if(!player.isMoving() && dir == Direction.Left && !mapController.getCellAt(x-1, y).isContains(ElementType.SolidWall)){
-			player.setMoving(true);
-			player.setCurrentDir(Direction.Left);
-			player.setX(x-1);
-		}else if(!player.isMoving() && dir == Direction.Right && !mapController.getCellAt(x+1, y).isContains(ElementType.SolidWall)){
-			player.setMoving(true);
-			player.setCurrentDir(Direction.Right);
-			player.setX(x+1);
+		int toX = x, toY = y;
+		
+		switch (dir) {
+		case Up:
+			toY--;
+			break;
+		case Down:
+			toY++;
+			break;
+		case Left:
+			toX--;
+			break;
+		case Right:
+			toX++;
+			break;
+		default:
+			break;
+		}
+		
+		Cell cell = mapController.getCellAt(toX, toY);
+		if(		cell.isContains(ElementType.SolidWall)
+				|| cell.isContains(ElementType.BrickWall)
+				|| cell.isContains(ElementType.Bomb)){
+			return;
+		}
+		//finally
+		player.setMoving(true);
+		player.setCurrentDir(dir);
+		player.setX(toX);
+		player.setY(toY);
+
+	}
+	private void placeBomb(){
+		if(player.isMoving()){
+			return;
+		}
+		MapController mapController = ((Play) game.getCurrentState()).getMapController();
+		Cell cell = mapController.getCellAt(player.getX(), player.getY());
+		if(!cell.isContains(ElementType.Bomb) && player.getActiveBombCount() < player.getBombCount()){
+			BombController bc = ((Play) game.getCurrentState()).getBombController();
+			bc.spawnBomb(player.getX(), player.getY(), player);
+			player.setActiveBombCount(player.getActiveBombCount() + 1);
+//			if(player.isMoving()){//this part may change later
+//				bc.spawnBomb(player.getPrevX(), player.getPrevY(), player);
+//			}else{
+//				bc.spawnBomb(player.getX(), player.getY(), player);
+//			}
 		}
 	}
-
 	public float getRealX() {
 		return player.getRealX();
 	}
@@ -131,5 +188,15 @@ public class PlayerController implements IPlayerController {
 	public float getRealY() {
 		return player.getRealY();
 	}
-	
+
+	public void addScore(int score) {
+		player.addScore(score);
+	}
+	public void bombExploded(){
+		player.setActiveBombCount(player.getActiveBombCount() - 1);
+	}
+
+	public Player getPlayer() {
+		return player;
+	}
 }

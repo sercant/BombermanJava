@@ -1,6 +1,7 @@
 package game.controllers;
 
 import game.controllers.interfaces.GeneralController;
+import game.gui.states.Play;
 import game.models.Door;
 
 import org.newdawn.slick.Input;
@@ -16,10 +17,20 @@ public class DoorController implements GeneralController{
 	}
 	
 	public void update(int delta){
+		if(door != null && door.isDestroyed()){
+			((Play)game.getCurrentState()).getMapController().getCellAt(door.getX(), door.getY()).deleteElement(door);
+			door = null;
+		}
+		if(door == null){
+			return;
+		}
 		Input input = game.getContainer().getInput();
 		
 		if(input.isKeyPressed(Input.KEY_SPACE)){//TEMPORARY
 			door.open();
 		}
+		
 	}
+	
+	
 }

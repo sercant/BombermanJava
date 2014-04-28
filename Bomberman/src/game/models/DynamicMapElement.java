@@ -2,8 +2,8 @@ package game.models;
 
 public abstract class DynamicMapElement extends MapElement {
 	
-	private int prevX;
-	private int prevY;
+	protected int prevX;
+	protected int prevY;
 	/**
 	 * Constructor method.
 	 * @param x X coordinate of the dynamic map element.

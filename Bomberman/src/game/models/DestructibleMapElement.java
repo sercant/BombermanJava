@@ -2,7 +2,7 @@ package game.models;
 
 
 public abstract class DestructibleMapElement extends MapElement{
-	private boolean destroyed;
+	protected boolean destroyed;
 	/**
 	 * Constructor method.
 	 * @param x X coordinate of the destructible map element.

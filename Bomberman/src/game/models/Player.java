@@ -16,6 +16,8 @@ public class Player extends DynamicMapElement{
 	
 	private boolean alive;
 	
+	private boolean killed;
+	
 	private boolean moving;
 	
 	private int score;
@@ -28,7 +30,7 @@ public class Player extends DynamicMapElement{
 	 * @param dir Direction of the player.
 	 */
 	public Player(int x, int y, Direction dir){
-		this( x, y, dir, 3, 1, 1, .6f);
+		this( x, y, dir, 3, 1, 2, .6f);
 	}
 	/**
 	 * Detailed constructor method.
@@ -59,11 +61,14 @@ public class Player extends DynamicMapElement{
 		score = 0;
 		
 		currentDir = dir;
+		
+		killed = false;
 	}
 	/**
 	 * Kills player. Player loses 1 life.
 	 */
 	public void kill(){
+		killed = true;
 		if(alive)
 			lives--;
 		if(lives < 0)
@@ -83,19 +88,24 @@ public class Player extends DynamicMapElement{
 	public void powerUp(PowerUpType power){
 		switch (power) {
 		case Speed:
-			moveSpeed = moveSpeed < 5.f ? moveSpeed + .1f : moveSpeed;
+			moveSpeed = moveSpeed < 1.5f ? moveSpeed + .2f : moveSpeed;
 			break;
 		case BombCount:
 			bombCount = bombCount < 7 ? bombCount + 1 : bombCount;
 			break;
 		case ExplosionRange:
-			explosionRange = explosionRange < 8 ? explosionRange + 1 : explosionRange;
+			explosionRange = explosionRange < 6 ? explosionRange + 1 : explosionRange;
 			break;
 		default:
 			break;
 		}
 	}
-
+	public void initLoc(int x, int y){
+		this.realX = this.x = this.prevX = x;
+		this.realY = this.y = this.prevY = y;
+		this.moving = false;
+		this.currentDir = Direction.Down;
+	}
 	public void setActiveBombCount(int activeBombCount) {
 		this.activeBombCount = activeBombCount;
 	}
@@ -166,5 +176,11 @@ public class Player extends DynamicMapElement{
 
 	public void setCurrentDir(Direction currentDir) {
 		this.currentDir = currentDir;
+	}
+	public boolean isKilled() {
+		return killed;
+	}
+	public void setKilled(boolean killed) {
+		this.killed = killed;
 	}
 }

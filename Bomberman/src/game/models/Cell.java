@@ -80,8 +80,37 @@ public class Cell {
 	}
 	
 	public LinkedList<MapElement> getMapElements() {
-		// TODO Auto-generated method stub
 		return mapElements;
 	}
-	
+	public void explode() {
+		Iterator<MapElement> iterator = mapElements.descendingIterator();
+		
+		while(iterator.hasNext()){
+			MapElement e = (MapElement) iterator.next();
+			if(e != null){
+				switch (e.getType()) {
+				case BrickWall:
+					((DestructibleMapElement) e).setDestroyed(true);
+					return;
+				case Door:
+					((DestructibleMapElement) e).setDestroyed(true);
+					break;
+				case Enemy:
+					((DestructibleMapElement) e).setDestroyed(true);
+					break;
+				case Player:
+					((Player) e).kill();
+					break;
+				default:
+					break;
+				}
+			}
+//			if(e != null && e.getClass() == DestructibleMapElement.class){
+//				((DestructibleMapElement) e).setDestroyed(true);
+//			}
+//			if(e != null && e.getClass() == Player.class){
+//				((Player) e).kill();
+//			}
+		}
+	}
 }

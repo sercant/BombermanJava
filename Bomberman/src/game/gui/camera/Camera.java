@@ -57,5 +57,12 @@ public class Camera {
 
 	public float getCameraY() {
 		return cameraY;
+	}
+	public void setMapHeight(int mapHeight) {
+		this.mapHeight = mapHeight;
+	}
+	public void setMapWidth(int mapWidth) {
+		this.mapWidth = mapWidth;
 	}   
+	
 }

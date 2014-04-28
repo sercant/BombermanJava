@@ -1,13 +1,17 @@
 package game.gui.states;
 
+import game.controllers.BombController;
+import game.controllers.BrickWallController;
 import game.controllers.DoorController;
+import game.controllers.ExplosionController;
 import game.controllers.MapController;
 import game.controllers.PlayerController;
+import game.controllers.PowerUpController;
+import game.factories.LevelFactory;
 import game.gui.camera.Camera;
 import game.gui.main.Game;
 import game.gui.painter.ElementPainter;
 import game.models.Direction;
-import game.models.Door;
 import game.models.Map;
 import game.models.Player;
 
@@ -21,14 +25,18 @@ import org.newdawn.slick.state.StateBasedGame;
 
 public class Play extends BasicGameState {
 	private int ID;
-//	private Map map;
 	private ElementPainter painter;
 	private Camera cam;
-	private int tileCountY = 11;
-	private int tileCountX = 19;
+	private int currentDifficulty = 0;
+	private LevelFactory levelFactory;
 	private PlayerController playerController;
 	private DoorController doorController;
 	private MapController mapController;
+	private BombController bombController;
+	private ExplosionController explosionController;
+	private BrickWallController brickWallController;
+	private PowerUpController powerUpController;
+//	private Map untouchedMap;
 	
 	public Play(int state){
 		this.ID = state;
@@ -39,26 +47,23 @@ public class Play extends BasicGameState {
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg)
 			throws SlickException {
-//		map = new Map(tileCountX, tileCountY);
-		Player player = new Player(1, 1, Direction.Down);
-		playerController = new PlayerController(player, sbg);
+		levelFactory = new LevelFactory();
 		
-		Door door = new Door(3, 3);
-		doorController = new DoorController(door, sbg);
+		playerController = new PlayerController(new Player(1, 1, Direction.Down), sbg);
 		
-		mapController = new MapController(new Map(tileCountX, tileCountY), sbg);
-		mapController.init();
-		try{
-			mapController.addMapElement(player);
-			mapController.addMapElement(door);
-		}catch(Exception e){
-			e.printStackTrace();
-		}
+		Map map = levelFactory.generateLevel(0, playerController.getPlayer());
+//		untouchedMap = new Map(map);
+		cam = new Camera(gc, map.getWidth(), map.getHeight());
 		
-		cam = new Camera(gc, mapController.getMapWidth(), mapController.getMapHeight());
+		setUpControllers(map, sbg);
 		
-		painter = new ElementPainter(sbg, cam, new Image("res/solidWall.png"), new Image("res/brickWall.png"), null, new Image("res/door.png"), null, new Image("res/playerwalk.png"), null);
-		
+		painter = new ElementPainter(sbg, cam, 	new Image("res/solidWall.png"),
+				new Image("res/brickWall.png"),
+				new Image("res/bomb.png"),
+				new Image("res/door.png"), 
+				new Image("res/explosion.png"), 
+				new Image("res/playerwalk.png"), 
+				new Image("res/powerUp.png"));
 	}
 	/**
 	 * Render part of the state. This is where the graphics printed on the screen.
@@ -68,7 +73,6 @@ public class Play extends BasicGameState {
 			throws SlickException {
 		g.setBackground(new Color(59, 121, 1));
 		painter.draw(g);
-		g.drawString("X: " + cam.getCameraX() + " Y: " + cam.getCameraY(), 300, 10);
 	}
 	/**
 	 * Update part of the state. This is where all the changes made.
@@ -77,7 +81,11 @@ public class Play extends BasicGameState {
 	public void update(GameContainer gc, StateBasedGame sbg, int delta)
 			throws SlickException {
 		playerController.update(delta);
-		doorController.update(delta);
+		doorController.update(delta);      
+		bombController.update(delta);
+		explosionController.update(delta);
+		brickWallController.update(delta);
+		powerUpController.update(delta);
 		cam.centerOn(playerController.getRealX() * Game.TILESIZE, playerController.getRealY() * Game.TILESIZE);
 	}
 
@@ -97,7 +105,45 @@ public class Play extends BasicGameState {
 	}
 
 	public int getLevelCode() {///WILL BE IMPLEMENTED LATER
-		// TODO Auto-generated method stub
-		return 0;
+		return Integer.toString(currentDifficulty).hashCode();
 	}
+	public BombController getBombController() {
+		return bombController;
+	}
+	public ExplosionController getExplosionController() {
+		return explosionController;
+	}
+	public BrickWallController getBrickWallController() {
+		return brickWallController;
+	}
+	public int getCurrentDifficulty() {
+		return currentDifficulty;
+	}
+	public void levelCompleted(StateBasedGame sbg) {
+		currentDifficulty++;
+		setUpControllers(levelFactory.generateLevel(currentDifficulty, playerController.getPlayer()), sbg);
+	}
+	private void setUpControllers(Map map, StateBasedGame sbg){
+		
+		doorController = new DoorController(levelFactory.getDoor(), sbg);
+		
+		mapController = new MapController(map, sbg);
+		
+		bombController = new BombController(sbg);
+		
+		explosionController = new ExplosionController(sbg);
+		
+		powerUpController = new PowerUpController(sbg);
+		powerUpController.setPowerUpElements(levelFactory.getPowerUps());
+		
+		brickWallController = new BrickWallController(sbg);
+		brickWallController.setBrickWalls(levelFactory.getBrickWalls());
+		
+		cam.setMapWidth(map.getWidth());
+		cam.setMapHeight(map.getHeight());
+	}
+//	public void playerDied(StateBasedGame sbg){
+//		Map map = new Map(untouchedMap);
+//		setUpControllers(map, sbg);
+//	}
 }
