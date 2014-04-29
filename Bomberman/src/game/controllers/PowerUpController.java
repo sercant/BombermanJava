@@ -1,6 +1,7 @@
 package game.controllers;
 
 import game.controllers.interfaces.GeneralController;
+import game.gui.main.Game;
 import game.gui.states.Play;
 import game.models.PowerUpElement;
 
@@ -24,17 +25,19 @@ public class PowerUpController implements GeneralController{
 		}
 		Iterator<PowerUpElement> iterator = powerUpElements.listIterator();
 		LinkedList<PowerUpElement> powerUpElementsToRemove = new LinkedList<PowerUpElement>();
+		Play play = (Play) game.getState(Game.play);
 		while(iterator.hasNext()){
 			PowerUpElement pue = (PowerUpElement) iterator.next();
 			if(pue != null && pue.isTaken()){
 				powerUpElementsToRemove.add(pue);
-				((Play)game.getCurrentState()).getMapController().getCellAt(pue.getX(), pue.getY()).deleteElement(pue);
+				play.getMapController().getCellAt(pue.getX(), pue.getY()).deleteElement(pue);
 			}
 		}
 		iterator = powerUpElementsToRemove.listIterator();
 		while(iterator.hasNext()){
 			PowerUpElement pue = (PowerUpElement) iterator.next();
 			powerUpElements.remove(pue);
+			play.getPlayerController().addScore(100);
 		}
 	}
 

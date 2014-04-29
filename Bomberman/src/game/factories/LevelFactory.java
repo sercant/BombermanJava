@@ -117,7 +117,7 @@ public class LevelFactory {
 			}else{
 				y = 2 * rand.nextInt(xLimit / 2 - 3) + 1;
 			}
-			if(x + y > 3){
+			if(x + y > 3){	//NEXT LEVEL PROGRAMMING RIGHT HERE
 				valid = true;
 			}
 		}while(!valid);

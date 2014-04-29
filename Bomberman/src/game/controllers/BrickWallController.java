@@ -1,6 +1,7 @@
 package game.controllers;
 
 import game.controllers.interfaces.GeneralController;
+import game.gui.main.Game;
 import game.gui.states.Play;
 import game.models.BrickWall;
 
@@ -26,17 +27,19 @@ public class BrickWallController implements GeneralController{
 		}
 		Iterator<BrickWall> iterator = brickWalls.listIterator();
 		LinkedList<BrickWall> brickWallsToRemove = new LinkedList<BrickWall>();
+		Play play = ((Play)game.getState(Game.play));
 		while(iterator.hasNext()){
 			BrickWall bw = (BrickWall) iterator.next();
 			if(bw != null && bw.isDestroyed()){
 				brickWallsToRemove.add(bw);
-				((Play)game.getCurrentState()).getMapController().getCellAt(bw.getX(), bw.getY()).deleteElement(bw);
+				play.getMapController().getCellAt(bw.getX(), bw.getY()).deleteElement(bw);
 			}
 		}
 		iterator = brickWallsToRemove.listIterator();
 		while(iterator.hasNext()){
 			BrickWall bw = (BrickWall) iterator.next();
 			brickWalls.remove(bw);
+			play.getPlayerController().addScore(50);
 		}
 	}
 	

@@ -92,8 +92,10 @@ public class PlayerController implements IPlayerController {
 		}
 		Cell cell = mapController.getCellAt(player.getX(), player.getY());
 		if(!player.isMoving()){
-			if(cell.isContains(ElementType.Door) && ((Door) cell.getElement(ElementType.Door)).isOpen())
+			if(cell.isContains(ElementType.Door) && ((Door) cell.getElement(ElementType.Door)).isOpen()){
+				player.setActiveBombCount(0);
 				((Play) game.getState(Game.play)).levelCompleted(game);
+			}
 			if(cell.isContains(ElementType.PowerUp)){
 				PowerUpElement pe = (PowerUpElement)cell.getElement(ElementType.PowerUp);
 				player.powerUp(pe.getPowerType());

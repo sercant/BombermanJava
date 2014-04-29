@@ -67,7 +67,7 @@ public class ElementPainter {
 		this.playerSprite = new SpriteSheet(this.playerIMG, Game.TILESIZE, Game.TILESIZE);
 		this.playerAnim = new Animation(false);
 		for(int i = 0; i < 4 ;i++)
-			this.playerAnim.addFrame(playerSprite.getSubImage(0, i), 100);
+			this.playerAnim.addFrame(playerSprite.getSubImage(0, i), 200);
 		this.playerAnim.setCurrentFrame(1);
 		
 		this.powerUpIMG = filterAndScale(powerUpIMG);
