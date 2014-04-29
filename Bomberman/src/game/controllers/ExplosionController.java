@@ -3,7 +3,6 @@ package game.controllers;
 import game.controllers.interfaces.GeneralController;
 import game.gui.states.Play;
 import game.models.Cell;
-import game.models.ElementType;
 import game.models.Explosion;
 
 import java.util.Iterator;
@@ -32,9 +31,6 @@ public class ExplosionController implements GeneralController{
 			if(e != null && e.isExpired(delta)){
 				Cell cell = ((Play)game.getCurrentState()).getMapController().getCellAt(e.getX(), e.getY());
 				explosionsToRemove.add(e);
-				if(cell.isContains(ElementType.Enemy)){
-					((Play)game.getCurrentState()).getPlayerController().addScore(100);
-				}
 				cell.explode();
 				cell.deleteElement(e);
 			}

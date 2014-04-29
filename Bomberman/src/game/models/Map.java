@@ -5,6 +5,7 @@ import game.gui.main.Game;
 import java.util.Iterator;
 
 
+
 public class Map {
 	
 	private Cell[][] cells;

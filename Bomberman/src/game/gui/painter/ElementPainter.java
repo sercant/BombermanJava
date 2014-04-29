@@ -21,6 +21,9 @@ import org.newdawn.slick.fills.GradientFill;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.StateBasedGame;
 
+import businessRules.BusinessRules;
+
+
 public class ElementPainter {
 	//replace this part with sprites
 	private Image solidWallIMG;
@@ -64,7 +67,7 @@ public class ElementPainter {
 		this.explosionIMG = filterAndScale(explosionIMG);
 		
 		this.playerIMG = filterAndScale(playerIMG);
-		this.playerSprite = new SpriteSheet(this.playerIMG, Game.TILESIZE, Game.TILESIZE);
+		this.playerSprite = new SpriteSheet(this.playerIMG, BusinessRules.TILESIZE, BusinessRules.TILESIZE);
 		this.playerAnim = new Animation(false);
 		for(int i = 0; i < 4 ;i++)
 			this.playerAnim.addFrame(playerSprite.getSubImage(0, i), 200);
@@ -74,9 +77,9 @@ public class ElementPainter {
 		this.cam = cam;
 		this.game = game;
 		
-		topRect = new Rectangle(0, 0, 1024, Game.TILESIZE);
+		topRect = new Rectangle(0, 0, 1024, BusinessRules.TILESIZE);
 		topRectFill = new GradientFill(0, 0, Color.gray, topRect.getMaxX(), topRect.getMaxY(), Color.gray);
-		topSpacing = Game.TILESIZE;
+		topSpacing = BusinessRules.TILESIZE;
 		
 		//sprite init
 	}
@@ -88,7 +91,7 @@ public class ElementPainter {
 	private Image filterAndScale(Image image){
 		if(image != null){
 			image.setFilter(Image.FILTER_NEAREST);
-			return image.getScaledCopy(Game.SCALE);
+			return image.getScaledCopy(BusinessRules.SCALE);
 		}else
 			return null;
 	}

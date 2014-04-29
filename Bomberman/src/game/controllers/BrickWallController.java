@@ -10,10 +10,13 @@ import java.util.LinkedList;
 
 import org.newdawn.slick.state.StateBasedGame;
 
+import businessRules.BusinessRules;
+
+
 public class BrickWallController implements GeneralController{
 	private StateBasedGame game;
 	private LinkedList<BrickWall> brickWalls;
-	
+
 	public BrickWallController(StateBasedGame sbg){
 		this.game = sbg;
 		brickWalls = new LinkedList<BrickWall>();
@@ -39,7 +42,7 @@ public class BrickWallController implements GeneralController{
 		while(iterator.hasNext()){
 			BrickWall bw = (BrickWall) iterator.next();
 			brickWalls.remove(bw);
-			play.getPlayerController().addScore(50);
+			play.getPlayerController().addScore(BusinessRules.getBrickwallscore());
 		}
 	}
 	

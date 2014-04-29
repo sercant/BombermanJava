@@ -15,6 +15,9 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
+import businessRules.BusinessRules;
+
+
 public class PlayerController implements IPlayerController {
 
 	private StateBasedGame game;
@@ -38,13 +41,13 @@ public class PlayerController implements IPlayerController {
 		
 		Input input = game.getContainer().getInput();
 		
-		if(input.isKeyDown(Input.KEY_UP)){
+		if(input.isKeyDown(BusinessRules.KEY_UP)){
 			movePlayer(Direction.Up);
-		}if (input.isKeyDown(Input.KEY_DOWN)) {
+		}if (input.isKeyDown(BusinessRules.KEY_DOWN)) {
 			movePlayer(Direction.Down);
-		}if (input.isKeyDown(Input.KEY_LEFT)) {
+		}if (input.isKeyDown(BusinessRules.KEY_LEFT)) {
 			movePlayer(Direction.Left);
-		}if (input.isKeyDown(Input.KEY_RIGHT)) {
+		}if (input.isKeyDown(BusinessRules.KEY_RIGHT)) {
 			movePlayer(Direction.Right);
 		}
 		

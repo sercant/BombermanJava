@@ -10,6 +10,9 @@ import java.util.LinkedList;
 
 import org.newdawn.slick.state.StateBasedGame;
 
+import businessRules.BusinessRules;
+
+
 public class PowerUpController implements GeneralController{
 	private StateBasedGame game;
 	private LinkedList<PowerUpElement> powerUpElements;
@@ -37,7 +40,7 @@ public class PowerUpController implements GeneralController{
 		while(iterator.hasNext()){
 			PowerUpElement pue = (PowerUpElement) iterator.next();
 			powerUpElements.remove(pue);
-			play.getPlayerController().addScore(100);
+			play.getPlayerController().addScore(BusinessRules.getPowerupscore());
 		}
 	}
 

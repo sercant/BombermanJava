@@ -6,7 +6,7 @@ public abstract class DestructibleMapElement extends MapElement{
 	/**
 	 * Constructor method.
 	 * @param x X coordinate of the destructible map element.
-	 * @param y Y coordinate of the destructible map element.
+	 * @param y Y coordinate of the destructable map element.
 	 * @param type Type of the element.
 	 */
 	public DestructibleMapElement(int x, int y, ElementType type) {
