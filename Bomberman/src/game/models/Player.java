@@ -1,5 +1,7 @@
 package game.models;
 
+import game.constants.Constants;
+
 
 public class Player extends DynamicMapElement{
 
@@ -30,7 +32,13 @@ public class Player extends DynamicMapElement{
 	 * @param dir Direction of the player.
 	 */
 	public Player(int x, int y, Direction dir){
-		this( x, y, dir, 3, 1, 2, .6f);
+		this( 	x,
+				y,
+				dir,
+				Constants.PLAYER_BASE_LIFE_COUNT,
+				Constants.PLAYER_BASE_BOMB_COUNT,
+				Constants.PLAYER_BASE_EXPLOSION_RANGE,
+				Constants.PLAYER_BASE_MOVE_SPEED);
 	}
 	/**
 	 * Detailed constructor method.
@@ -88,13 +96,13 @@ public class Player extends DynamicMapElement{
 	public void powerUp(PowerUpType power){
 		switch (power) {
 		case Speed:
-			moveSpeed = moveSpeed < 1.5f ? moveSpeed + .2f : moveSpeed;
+			moveSpeed = moveSpeed < Constants.PLAYER_MAX_MOVE_SPEED ? moveSpeed + Constants.PLAYER_STEP_MOVE_SPEED : moveSpeed;
 			break;
 		case BombCount:
-			bombCount = bombCount < 7 ? bombCount + 1 : bombCount;
+			bombCount = bombCount < Constants.PLAYER_MAX_BOMB_COUNT ? bombCount + Constants.PLAYER_STEP_BOMB_COUNT : bombCount;
 			break;
 		case ExplosionRange:
-			explosionRange = explosionRange < 6 ? explosionRange + 1 : explosionRange;
+			explosionRange = explosionRange < Constants.PLAYER_MAX_EXPLOSION_RANGE ? explosionRange + Constants.PLAYER_STEP_EXPLOSION_RANGE : explosionRange;
 			break;
 		default:
 			break;

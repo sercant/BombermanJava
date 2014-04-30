@@ -25,22 +25,17 @@ public class ExplosionController implements GeneralController{
 			return;
 		}
 		Iterator<Explosion> iterator = explosions.listIterator();
-		LinkedList<Explosion> explosionsToRemove = new LinkedList<Explosion>();
 		while(iterator.hasNext()){
 			Explosion e = (Explosion) iterator.next();
 			if(e != null && e.isExpired(delta)){
 				Cell cell = ((Play)game.getCurrentState()).getMapController().getCellAt(e.getX(), e.getY());
-				explosionsToRemove.add(e);
 				cell.explode();
 				cell.deleteElement(e);
+				iterator.remove();
 			}
 		}
-		iterator = explosionsToRemove.listIterator();
-		while(iterator.hasNext()){
-			Explosion e = (Explosion) iterator.next();
-			explosions.remove(e);
-		}
 	}
+	
 	public void spawnExplosion(int x, int y){
 		Explosion e = new Explosion(x, y);
 		explosions.add(e);

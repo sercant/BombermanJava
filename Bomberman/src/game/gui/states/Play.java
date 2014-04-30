@@ -1,5 +1,6 @@
 package game.gui.states;
 
+import game.constants.Constants;
 import game.controllers.BombController;
 import game.controllers.BrickWallController;
 import game.controllers.DoorController;
@@ -58,13 +59,7 @@ public class Play extends BasicGameState {
 		
 		setUpControllers(map, sbg);
 		
-		painter = new ElementPainter(sbg, cam, 	new Image("res/solidWall.png"),
-				new Image("res/brickWall.png"),
-				new Image("res/bomb.png"),
-				new Image("res/door.png"), 
-				new Image("res/explosion.png"), 
-				new Image("res/playerwalk.png"), 
-				new Image("res/powerUp.png"));
+		painter = new ElementPainter(sbg, cam);
 	}
 	/**
 	 * Render part of the state. This is where the graphics printed on the screen.
@@ -87,7 +82,7 @@ public class Play extends BasicGameState {
 		explosionController.update(delta);
 		brickWallController.update(delta);
 		powerUpController.update(delta);
-		cam.centerOn(playerController.getRealX() * Game.TILESIZE, playerController.getRealY() * Game.TILESIZE);
+		cam.centerOn(playerController.getRealX() * Constants.GAME_TILESIZE, playerController.getRealY() * Constants.GAME_TILESIZE);
 	}
 
 	@Override

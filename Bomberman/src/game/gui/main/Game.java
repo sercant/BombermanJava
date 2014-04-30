@@ -1,5 +1,6 @@
 package game.gui.main;
 
+import game.constants.Constants;
 import game.gui.states.EnterCode;
 import game.gui.states.GameOver;
 import game.gui.states.Highscores;
@@ -13,9 +14,9 @@ import org.newdawn.slick.state.StateBasedGame;
 
 public class Game extends StateBasedGame{
 	
-	public static final int SCALE = 4;
-	public static final int TILESIZE = 16 * SCALE;
-	public static final String gameName = "Bomberman";
+//	public static final int SCALE = 4;
+//	public static final int TILESIZE = 16 * SCALE;
+//	public static final String gameName = "Bomberman";
 	public static final int menu = 0;
 	public static final int play = 1;
 	public static final int enterCode = 2;
@@ -45,7 +46,7 @@ public class Game extends StateBasedGame{
 	public static void main(String[] args) {
 		AppGameContainer appgc;
 		try {
-			appgc = new AppGameContainer(new Game(gameName));
+			appgc = new AppGameContainer(new Game(Constants.GAME_NAME));
 			//appgc.setDisplayMode(appgc.getScreenWidth(), appgc.getScreenHeight(), true);
 			appgc.setDisplayMode(1024, 768, false);
 			appgc.setTargetFrameRate(60);

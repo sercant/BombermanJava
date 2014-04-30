@@ -1,5 +1,6 @@
 package game.controllers;
 
+import game.constants.Constants;
 import game.controllers.interfaces.IPlayerController;
 import game.gui.main.Game;
 import game.gui.states.GameOver;
@@ -14,8 +15,6 @@ import game.models.PowerUpElement;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
-
-import businessRules.BusinessRules;
 
 
 public class PlayerController implements IPlayerController {
@@ -41,13 +40,13 @@ public class PlayerController implements IPlayerController {
 		
 		Input input = game.getContainer().getInput();
 		
-		if(input.isKeyDown(BusinessRules.KEY_UP)){
+		if(input.isKeyDown(Constants.PLAYER_KEY_UP)){
 			movePlayer(Direction.Up);
-		}if (input.isKeyDown(BusinessRules.KEY_DOWN)) {
+		}if (input.isKeyDown(Constants.PLAYER_KEY_DOWN)) {
 			movePlayer(Direction.Down);
-		}if (input.isKeyDown(BusinessRules.KEY_LEFT)) {
+		}if (input.isKeyDown(Constants.PLAYER_KEY_LEFT)) {
 			movePlayer(Direction.Left);
-		}if (input.isKeyDown(BusinessRules.KEY_RIGHT)) {
+		}if (input.isKeyDown(Constants.PLAYER_KEY_RIGHT)) {
 			movePlayer(Direction.Right);
 		}
 		

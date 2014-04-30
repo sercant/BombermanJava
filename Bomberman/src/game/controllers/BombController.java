@@ -1,5 +1,6 @@
 package game.controllers;
 
+import game.constants.Constants;
 import game.controllers.interfaces.GeneralController;
 import game.gui.states.Play;
 import game.models.Bomb;
@@ -28,25 +29,15 @@ public class BombController implements GeneralController{
 			return;
 		}
 		Iterator<Bomb> iterator = bombs.listIterator();
-		LinkedList<Bomb> bombsToRemove = new LinkedList<Bomb>();
 		while(iterator.hasNext()){
 			Bomb b = (Bomb) iterator.next();
 			if(b != null && b.isExploded(delta)){
-				bombsToRemove.add(b);
 				((Play)game.getCurrentState()).getMapController().getCellAt(b.getX(), b.getY()).deleteElement(b);
+				PlayerController pc = ((Play)game.getCurrentState()).getPlayerController();
 				explode(b);
+				pc.bombExploded();
+				iterator.remove();
 			}
-		}
-		if(bombsToRemove.isEmpty()){
-			return;
-		}
-		PlayerController pc = ((Play)game.getCurrentState()).getPlayerController();
-		
-		iterator = bombsToRemove.listIterator();
-		while(iterator.hasNext()){
-			Bomb b = (Bomb) iterator.next();
-			bombs.remove(b);
-			pc.bombExploded();
 		}
 	}
 
@@ -123,7 +114,7 @@ public class BombController implements GeneralController{
 	}
 
 	public void spawnBomb(int x, int y, Player player){
-		Bomb b = new Bomb(x, y, player.getExplosionRange(), 3000);
+		Bomb b = new Bomb(x, y, player.getExplosionRange(), Constants.DURATION_TIME_BOMB);
 		bombs.add(b);
 		((Play)game.getCurrentState()).getMapController().addMapElement(b);
 	}
