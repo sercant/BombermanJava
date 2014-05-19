@@ -65,4 +65,12 @@ public class MapController implements GeneralController{
 		return map.getCellAt(x, y);
 	}
 
+	public void deleteElementAtCell(int x, int y, MapElement e) {
+		map.getCellAt(x, y).deleteElement(e);
+	}
+
+	public void addElementToCell(int x, int y, MapElement e) {
+		map.getCellAt(x, y).addElement(e);
+	}
+
 }
