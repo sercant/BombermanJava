@@ -27,9 +27,12 @@ public class Constants {
 	
 	public static final int DURATION_TIME_FLAME = 1000;
 	public static final int DURATION_TIME_BOMB = 3000;
+	
+	public static final float ENEMY_MOVE_SPEED = 0.5f;
 
 	public static final int SCORE_BRICKWALL = 50;
 	public static final int SCORE_POWERUP = 100;
+	public static final int SCORE_ENEMY = 50;
 	
 	public static final int MAP_BASE_TILECOUNTX = 17;
 	public static final int MAP_BASE_TILECOUNTY = 11;
