@@ -1,5 +1,7 @@
 package game.gui.states;
 
+import game.factories.ImageFactory;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -25,7 +27,7 @@ public class Menu extends BasicGameState {
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg)
 			throws SlickException {
-		logo = new Image("res/bombermanText.png");
+		logo = ImageFactory.getLogoImage();
 		logo.setFilter(Image.FILTER_NEAREST);
 		logo = logo.getScaledCopy(5); //temporary
 		

@@ -1,6 +1,8 @@
 package game.controllers;
 
+import game.constants.Constants;
 import game.controllers.interfaces.GeneralController;
+import game.gui.main.Game;
 import game.gui.states.Play;
 import game.models.PowerUpElement;
 
@@ -8,6 +10,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import org.newdawn.slick.state.StateBasedGame;
+
 
 public class PowerUpController implements GeneralController{
 	private StateBasedGame game;
@@ -23,18 +26,14 @@ public class PowerUpController implements GeneralController{
 			return;
 		}
 		Iterator<PowerUpElement> iterator = powerUpElements.listIterator();
-		LinkedList<PowerUpElement> powerUpElementsToRemove = new LinkedList<PowerUpElement>();
+		Play play = (Play) game.getState(Game.play);
 		while(iterator.hasNext()){
 			PowerUpElement pue = (PowerUpElement) iterator.next();
 			if(pue != null && pue.isTaken()){
-				powerUpElementsToRemove.add(pue);
-				((Play)game.getCurrentState()).getMapController().getCellAt(pue.getX(), pue.getY()).deleteElement(pue);
+				play.getMapController().getCellAt(pue.getX(), pue.getY()).deleteElement(pue);
+				play.getPlayerController().addScore(Constants.SCORE_POWERUP);
+				iterator.remove();
 			}
-		}
-		iterator = powerUpElementsToRemove.listIterator();
-		while(iterator.hasNext()){
-			PowerUpElement pue = (PowerUpElement) iterator.next();
-			powerUpElements.remove(pue);
 		}
 	}
 

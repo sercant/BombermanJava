@@ -1,5 +1,6 @@
 package game.controllers;
 
+import game.constants.Constants;
 import game.controllers.interfaces.IPlayerController;
 import game.gui.main.Game;
 import game.gui.states.GameOver;
@@ -32,68 +33,40 @@ public class PlayerController implements IPlayerController {
 
 	@Override
 	public void update(int delta) {
-		int playerX = player.getX();
-		int playerY = player.getY();
-		MapController mapController = ((Play) game.getCurrentState()).getMapController();
 		
-		Input input = game.getContainer().getInput();
-		
-		if(input.isKeyDown(Input.KEY_UP)){
-			movePlayer(Direction.Up);
-		}if (input.isKeyDown(Input.KEY_DOWN)) {
-			movePlayer(Direction.Down);
-		}if (input.isKeyDown(Input.KEY_LEFT)) {
-			movePlayer(Direction.Left);
-		}if (input.isKeyDown(Input.KEY_RIGHT)) {
-			movePlayer(Direction.Right);
-		}
-		
-		if(player.isMoving()){
-			((Play) game.getCurrentState()).getElementPainter().startPlayerAnim(player.getCurrentDir());
-		}else
-			((Play) game.getCurrentState()).getElementPainter().stopPlayerAnim(player.getCurrentDir());
-		
-		if(player.isMoving()){
-			moveTimer -= delta;
-			smoothShift = (float) delta / getMoveTime();
-			float realX = player.getRealX();
-			float realY = player.getRealY();
-			
-			if(realX > playerX)
-				player.setRealX(realX -= smoothShift);
-			else if(realX < playerX)
-				player.setRealX(realX += smoothShift);
-			if(realY > playerY)
-				player.setRealY(realY -= smoothShift);
-			else if(realY < playerY)
-				player.setRealY(realY += smoothShift);
-			
-			if(moveTimer < 0){
-				player.setMoving(false);
-				resetMoveTimer();
-				smoothShift = 0;
-				player.setRealX(realX = playerX);
-				player.setRealY(realY = playerY);
-				mapController.getCellAt(player.getPrevX(), player.getPrevY()).deleteElement(player);
-				mapController.getCellAt(player.getX(), player.getY()).addElement(player);
-				player.setPrevX(player.getX());
-				player.setPrevY(player.getY());
-			}
-		}
 		if(!player.isAlive()){
 			try {
 				game.initStatesList(game.getContainer());
 				((GameOver) game.getState(Game.gameOver)).setScore(player.getScore());
 				((GameOver) game.getState(Game.gameOver)).setLevelCode(((Play)game.getCurrentState()).getLevelCode());
 				game.enterState(Game.gameOver);
+				return;
 			} catch (SlickException e) {
 				e.printStackTrace();
 			}
 		}
+		
+		handleInput();
+		
+		if(player.isMoving()){
+			((Play) game.getCurrentState()).getElementPainter().startPlayerAnim(player.getCurrentDir());
+			handlePlayerMovement(delta);
+		}else
+			((Play) game.getCurrentState()).getElementPainter().stopPlayerAnim(player.getCurrentDir());
+		
+		handleCollisionWithOtherElements();
+		
+	}
+	
+	private void handleCollisionWithOtherElements() {
+		MapController mapController = ((Play) game.getCurrentState()).getMapController();
+		
 		Cell cell = mapController.getCellAt(player.getX(), player.getY());
 		if(!player.isMoving()){
-			if(cell.isContains(ElementType.Door) && ((Door) cell.getElement(ElementType.Door)).isOpen())
+			if(cell.isContains(ElementType.Door) && ((Door) cell.getElement(ElementType.Door)).isOpen()){
+				player.setActiveBombCount(0);
 				((Play) game.getState(Game.play)).levelCompleted(game);
+			}
 			if(cell.isContains(ElementType.PowerUp)){
 				PowerUpElement pe = (PowerUpElement)cell.getElement(ElementType.PowerUp);
 				player.powerUp(pe.getPowerType());
@@ -106,12 +79,58 @@ public class PlayerController implements IPlayerController {
 				mapController.getCellAt(player.getX(), player.getY()).addElement(player);
 			}		
 		}
+	}
+
+	private void handlePlayerMovement(float delta) {
+		int playerX = player.getX();
+		int playerY = player.getY();
+		
+		MapController mapController = ((Play) game.getState(Game.play)).getMapController();
+		
+		moveTimer -= delta;
+		smoothShift = (float) delta / getMoveTime();
+		float realX = player.getRealX();
+		float realY = player.getRealY();
+		
+		if(realX > playerX)
+			player.setRealX(realX -= smoothShift);
+		else if(realX < playerX)
+			player.setRealX(realX += smoothShift);
+		if(realY > playerY)
+			player.setRealY(realY -= smoothShift);
+		else if(realY < playerY)
+			player.setRealY(realY += smoothShift);
+		
+		if(moveTimer < 0){
+			player.setMoving(false);
+			resetMoveTimer();
+			smoothShift = 0;
+			player.setRealX(realX = playerX);
+			player.setRealY(realY = playerY);
+			
+			mapController.deleteElementAtCell(player.getPrevX(), player.getPrevY(), player);
+			mapController.addElementToCell(player.getX(), player.getY(), player);
+			
+			player.setPrevX(player.getX());
+			player.setPrevY(player.getY());
+		}
+	}
+	private void handleInput() {
+		Input input = game.getContainer().getInput();
 		
 		if(input.isKeyDown(Input.KEY_LCONTROL)){
 			placeBomb();
+		}if(input.isKeyDown(Constants.PLAYER_KEY_UP)){
+			movePlayer(Direction.Up);
+		}if (input.isKeyDown(Constants.PLAYER_KEY_DOWN)) {
+			movePlayer(Direction.Down);
+		}if (input.isKeyDown(Constants.PLAYER_KEY_LEFT)) {
+			movePlayer(Direction.Left);
+		}if (input.isKeyDown(Constants.PLAYER_KEY_RIGHT)) {
+			movePlayer(Direction.Right);
 		}
 	}
-
+	
 	private void resetMoveTimer() {
 		moveTimer = getMoveTime();
 	}

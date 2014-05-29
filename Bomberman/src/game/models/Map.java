@@ -1,8 +1,9 @@
 package game.models;
 
-import game.gui.main.Game;
+import game.constants.Constants;
 
 import java.util.Iterator;
+
 
 
 public class Map {
@@ -48,14 +49,14 @@ public class Map {
 	 * @return	Width of the map
 	 */
 	public int getWidth(){
-		return tileCountX * Game.TILESIZE;
+		return tileCountX * Constants.GAME_TILESIZE;
 	}
 	/**
 	 * Getter method for height of the map
 	 * @return	Width of the map
 	 */
 	public int getHeight(){
-		return tileCountY * Game.TILESIZE + Game.TILESIZE;
+		return tileCountY * Constants.GAME_TILESIZE + Constants.GAME_TILESIZE;
 	}
 	/**
 	 * Getter method for accessing a Cell at the coordinates x and y.

@@ -1,5 +1,6 @@
 package game.factories;
 
+import game.constants.Constants;
 import game.models.BrickWall;
 import game.models.Cell;
 import game.models.Door;
@@ -30,8 +31,8 @@ public class LevelFactory {
 		this.door = null;
 		Vector2f tempVec = new Vector2f();
 		
-		int tileCountX = 17 + dificulty * 2;
-		int tileCountY = 11 + dificulty * 2;
+		int tileCountX = Constants.MAP_BASE_TILECOUNTX + dificulty * 2;
+		int tileCountY = Constants.MAP_BASE_TILECOUNTY + dificulty * 2;
 		
 		Map map = new Map(tileCountX, tileCountY);
 		//Main structure
@@ -117,7 +118,7 @@ public class LevelFactory {
 			}else{
 				y = 2 * rand.nextInt(xLimit / 2 - 3) + 1;
 			}
-			if(x + y > 3){
+			if(x + y > 3){	//NEXT LEVEL PROGRAMMING RIGHT HERE
 				valid = true;
 			}
 		}while(!valid);

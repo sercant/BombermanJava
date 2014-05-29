@@ -1,6 +1,8 @@
 package game.gui.painter;
 
+import game.constants.Constants;
 import game.controllers.MapController;
+import game.factories.ImageFactory;
 import game.gui.camera.Camera;
 import game.gui.main.Game;
 import game.gui.states.Play;
@@ -16,10 +18,12 @@ import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.fills.GradientFill;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.StateBasedGame;
+
 
 public class ElementPainter {
 	//replace this part with sprites
@@ -56,27 +60,32 @@ public class ElementPainter {
 	 * @param playerIMG Image of the player.
 	 * @param powerUpIMG Image of the power up.
 	 */
-	public ElementPainter(StateBasedGame game, Camera cam, Image solidWallIMG, Image brickWallIMG, Image bombIMG, Image doorIMG, Image explosionIMG, Image playerIMG, Image powerUpIMG){
-		this.solidWallIMG = filterAndScale(solidWallIMG);
-		this.brickWallIMG = filterAndScale(brickWallIMG);
-		this.bombIMG = filterAndScale(bombIMG);
-		this.doorIMG = filterAndScale(doorIMG);
-		this.explosionIMG = filterAndScale(explosionIMG);
+	public ElementPainter(StateBasedGame game, Camera cam){
+		try {
+			this.solidWallIMG = filterAndScale(ImageFactory.getSolidWallImage());
+			this.brickWallIMG = filterAndScale(ImageFactory.getBrickWallImage());
+			this.bombIMG = filterAndScale(ImageFactory.getBombImage());
+			this.doorIMG = filterAndScale(ImageFactory.getDoorImage());
+			this.explosionIMG = filterAndScale(ImageFactory.getExplosionImage());
+			this.playerIMG = filterAndScale(ImageFactory.getPlayerImage());
+			this.powerUpIMG = filterAndScale(ImageFactory.getPowerUpImage());
+		} catch (SlickException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		this.playerIMG = filterAndScale(playerIMG);
-		this.playerSprite = new SpriteSheet(this.playerIMG, Game.TILESIZE, Game.TILESIZE);
+		this.playerSprite = new SpriteSheet(this.playerIMG, Constants.GAME_TILESIZE, Constants.GAME_TILESIZE);
 		this.playerAnim = new Animation(false);
 		for(int i = 0; i < 4 ;i++)
-			this.playerAnim.addFrame(playerSprite.getSubImage(0, i), 100);
+			this.playerAnim.addFrame(playerSprite.getSubImage(0, i), 200);
 		this.playerAnim.setCurrentFrame(1);
 		
-		this.powerUpIMG = filterAndScale(powerUpIMG);
 		this.cam = cam;
 		this.game = game;
 		
-		topRect = new Rectangle(0, 0, 1024, Game.TILESIZE);
+		topRect = new Rectangle(0, 0, 1024, Constants.GAME_TILESIZE);
 		topRectFill = new GradientFill(0, 0, Color.gray, topRect.getMaxX(), topRect.getMaxY(), Color.gray);
-		topSpacing = Game.TILESIZE;
+		topSpacing = Constants.GAME_TILESIZE;
 		
 		//sprite init
 	}
@@ -88,7 +97,7 @@ public class ElementPainter {
 	private Image filterAndScale(Image image){
 		if(image != null){
 			image.setFilter(Image.FILTER_NEAREST);
-			return image.getScaledCopy(Game.SCALE);
+			return image.getScaledCopy(Constants.GAME_SCALE);
 		}else
 			return null;
 	}
@@ -150,25 +159,25 @@ public class ElementPainter {
 		g.setColor(Color.black);
 		switch (e.getType()) {
 		case SolidWall:
-			solidWallIMG.draw(e.getRealX() * Game.TILESIZE + sideShift, e.getRealY() * Game.TILESIZE + topShift);
+			solidWallIMG.draw(e.getRealX() * Constants.GAME_TILESIZE + sideShift, e.getRealY() * Constants.GAME_TILESIZE + topShift);
 			break;
 		case Door:
-			doorIMG.draw(e.getRealX() * Game.TILESIZE + sideShift, e.getRealY() * Game.TILESIZE + topShift);
+			doorIMG.draw(e.getRealX() * Constants.GAME_TILESIZE + sideShift, e.getRealY() * Constants.GAME_TILESIZE + topShift);
 			break;
 		case Player:
-			playerAnim.draw(e.getRealX() * Game.TILESIZE + sideShift, e.getRealY() * Game.TILESIZE + topShift);
+			playerAnim.draw(e.getRealX() * Constants.GAME_TILESIZE + sideShift, e.getRealY() * Constants.GAME_TILESIZE + topShift);
 			break;
 		case Bomb:
-			bombIMG.draw(e.getRealX() * Game.TILESIZE + sideShift, e.getRealY() * Game.TILESIZE + topShift);
+			bombIMG.draw(e.getRealX() * Constants.GAME_TILESIZE + sideShift, e.getRealY() * Constants.GAME_TILESIZE + topShift);
 			break;
 		case Explosion:
-			explosionIMG.draw(e.getRealX() * Game.TILESIZE + sideShift, e.getRealY() * Game.TILESIZE + topShift);
+			explosionIMG.draw(e.getRealX() * Constants.GAME_TILESIZE + sideShift, e.getRealY() * Constants.GAME_TILESIZE + topShift);
 			break;
 		case BrickWall:
-			brickWallIMG.draw(e.getRealX() * Game.TILESIZE + sideShift, e.getRealY() * Game.TILESIZE + topShift);
+			brickWallIMG.draw(e.getRealX() * Constants.GAME_TILESIZE + sideShift, e.getRealY() * Constants.GAME_TILESIZE + topShift);
 			break;
 		case PowerUp:
-			powerUpIMG.draw(e.getRealX() * Game.TILESIZE + sideShift, e.getRealY() * Game.TILESIZE + topShift);
+			powerUpIMG.draw(e.getRealX() * Constants.GAME_TILESIZE + sideShift, e.getRealY() * Constants.GAME_TILESIZE + topShift);
 			break;
 		default:
 			break;
