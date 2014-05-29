@@ -48,5 +48,5 @@ public class Constants {
 	public static final String IMAGE_LOC_PLAYER = "res/playerwalk.png";
 	public static final String IMAGE_LOC_POWERUP = "res/powerUp.png";
 
-	public static final String PLAYER_NAME = "Sercan";
+	public static String PLAYER_NAME = System.getProperty("user.name");; //This is temporary
 }

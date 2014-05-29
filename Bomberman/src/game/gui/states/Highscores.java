@@ -21,15 +21,13 @@ public class Highscores extends BasicGameState {
 	public Highscores(int state) {
 		ID = state;
 		HighScoreHandler.setHighscoreGetter(new DatabaseLayer());
-
-		highscores = (ArrayList<String>) HighScoreHandler.getAllTimeScores();
 	}
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg)
 			throws SlickException {
 		// TODO Auto-generated method stub
-
+		highscores = (ArrayList<String>) HighScoreHandler.getAllTimeScores();
 	}
 
 	@Override
@@ -40,8 +38,9 @@ public class Highscores extends BasicGameState {
 		if (highscores == null) {
 			g.drawString("Can't receive highscores!!", gc.getWidth() / 2 - 100, 100);
 		} else {
+			g.drawString("Name - Score - Date", gc.getWidth() / 2 - 100 , 50);
 			for (int i = 0, j = 100; i < 10; i++, j += 50) {
-				if (i > highscores.size()) {
+				if (i == highscores.size()) {
 					break;
 				}
 				g.drawString(highscores.get(i), gc.getWidth() / 2 - 100, j);
