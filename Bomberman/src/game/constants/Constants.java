@@ -47,4 +47,6 @@ public class Constants {
 	public static final String IMAGE_LOC_EXPLOSION = "res/explosion.png";
 	public static final String IMAGE_LOC_PLAYER = "res/playerwalk.png";
 	public static final String IMAGE_LOC_POWERUP = "res/powerUp.png";
+
+	public static final String PLAYER_NAME = "Sercan";
 }

@@ -14,6 +14,7 @@ public class ImageFactory {
 	private static Image explosionImage;
 	private static Image playerImage;
 	private static Image powerUpImage;
+	private static Image logo;
 	
 	public static Image getSolidWallImage() throws SlickException{
 		if(solidWallImage == null){
@@ -58,5 +59,10 @@ public class ImageFactory {
 		}
 		return powerUpImage;
 	}
-	
+	public static Image getLogoImage() throws SlickException{
+		if(logo == null){
+			logo = new Image("res/bombermanText.png");
+		}
+		return logo;
+	}
 }
